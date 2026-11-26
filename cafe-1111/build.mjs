@@ -82,16 +82,12 @@ const html = `<!doctype html>
 </style>
 <link rel="stylesheet" href="cafe.css">
 <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
-<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
-<link rel="modulepreload" href="assets/moments/moments.js">
-<link rel="modulepreload" href="assets/moments/lib.js">
-<link rel="modulepreload" href="assets/moments/photo-chapters/moment.js">
 </head>
 <body>
 <!-- type: place (café)
      deal: hero place, nav nav-cards (palabras simples), close close-word (momento de tipo: el nombre), footer footer-columns,
      rhythm surface-pairs, buttons arrow, mark: el logotipo propio del cliente (llave antigua), palette: colores propios (start.mjs brand)
-     moments: photo-chapters en #historia -->
+     galería fija de 3 fotos en #historia -->
 <header class="nav">
   <div class="wrap nav__bar">
     <a class="skip-link" href="#top">Ir al contenido</a>
@@ -155,26 +151,26 @@ const html = `<!doctype html>
     </div>
   </div>
 
-  <section class="section" id="historia" data-moment="photo-chapters" aria-labelledby="historia-h">
-    <div class="wrap mo-ph">
-      <div class="mo-ph__head"><h2 id="historia-h">Life is too short for bad coffee</h2><p>Espresso, latte con canela y café americano con muffin de elote, servidos en la mesa de madera.</p></div>
-      <ol class="mo-ph__list">
-        <li class="mo-ph__ch">
-          <figure class="mo-ph__pic"><img src="assets/img/photo-m28989985-1200.webp" alt="Una taza blanca bajo el portafiltro mientras corre el espresso" width="1200" height="857" loading="lazy" data-source="library-057" data-subject="bar"></figure>
+  <section class="section" id="historia" aria-labelledby="historia-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="historia-h">Life is too short for bad coffee</h2><p>Espresso, latte con canela y café americano con muffin de elote, servidos en la mesa de madera.</p></div>
+      <div class="grid gallery">
+        <a class="gallery__item span-4" href="#calientes">
+          <figure class="gallery__pic"><img src="assets/img/photo-m28989985-1200.webp" alt="Una taza blanca bajo el portafiltro mientras corre el espresso" width="1200" height="857" loading="lazy" data-source="library-057" data-subject="bar" style="object-position: 62% 60%"></figure>
           <h3>Espresso, sencillo o doble</h3>
-          <p>La base de todo: $32 el sencillo, $41 el doble. Pídelo con carga extra por $10.</p>
-        </li>
-        <li class="mo-ph__ch">
-          <figure class="mo-ph__pic"><img src="img/latte-1200.webp" alt="Latte en vaso de cristal con capas de leche y espuma con canela, sobre plato blanco" width="1200" height="1577" loading="lazy" data-source="client" data-subject="latte"></figure>
+          <p>$32 el sencillo, $41 el doble. Con carga extra por $10.</p>
+        </a>
+        <a class="gallery__item span-4" href="#calientes">
+          <figure class="gallery__pic"><img src="img/latte-1200.webp" alt="Latte en vaso de cristal con capas de leche y espuma con canela, sobre plato blanco" width="1200" height="1577" loading="lazy" data-source="client" data-subject="latte"></figure>
           <h3>Latte con espuma y canela</h3>
-          <p>$43 chico, $52 grande. Con vainilla, caramelo, avellana o menta desde $54.</p>
-        </li>
-        <li class="mo-ph__ch">
-          <figure class="mo-ph__pic"><img src="img/americano-muffin-1200.webp" alt="Taza de café americano junto a un muffin de elote en la mesa junto a la ventana" width="1200" height="1582" loading="lazy" data-source="client" data-subject="americano y muffin"></figure>
+          <p>$43 chico, $52 grande. Con sabor desde $54.</p>
+        </a>
+        <a class="gallery__item span-4" href="#dulce">
+          <figure class="gallery__pic"><img src="img/americano-muffin-1200.webp" alt="Taza de café americano junto a un muffin de elote en la mesa junto a la ventana" width="1200" height="1582" loading="lazy" data-source="client" data-subject="americano y muffin"></figure>
           <h3>Americano y muffin de elote</h3>
-          <p>Un americano de $32 y un muffin de elote de $42: el desayuno más corto de la casa.</p>
-        </li>
-      </ol>
+          <p>Americano $32 y muffin de elote $42.</p>
+        </a>
+      </div>
     </div>
   </section>
 ${sections.map(menuSection).join('\n')}

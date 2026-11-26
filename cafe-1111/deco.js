@@ -18,6 +18,30 @@
     setTimeout(() => document.querySelectorAll('[data-reveal]').forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add('is-in'); }), 50);
   } else if (word) word.classList.add('is-in');
 
+  // pestañas del menú
+  const tabs = [...document.querySelectorAll('.tab-x')];
+  const menu = document.getElementById('menu');
+  function show(id, scroll) {
+    const t = tabs.find((x) => x.dataset.tab === id); if (!t) return false;
+    tabs.forEach((x) => { const on = x === t; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1;
+      const pnl = document.getElementById(x.dataset.tab); pnl.hidden = !on;
+      if (on && !reduce) { pnl.querySelectorAll('.panel-x__head, .mcard').forEach((c, i) => c.style.setProperty('--i', Math.min(i, 14))); pnl.classList.remove('is-entering'); void pnl.offsetWidth; pnl.classList.add('is-entering'); } });
+    const bar = t.parentElement; bar.scrollTo({ left: t.offsetLeft - (bar.clientWidth - t.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+    if (scroll) menu.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    return true;
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => { show(t.dataset.tab, false); const top = menu.querySelector('.tabs-x').getBoundingClientRect().top; if (top < 0 || top > innerHeight * 0.6) menu.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); });
+    t.addEventListener('keydown', (e) => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); show(n.dataset.tab, false); });
+  });
+  // enlaces #calientes, #frios, #comer, #dulce abren su pestaña
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]'); if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    if (tabs.some((t) => t.dataset.tab === id)) { e.preventDefault(); show(id, true); document.querySelector('.nav')?.classList.remove('is-open'); }
+  });
+  if (location.hash) show(location.hash.slice(1), true);
+
   // vuelo al carrito: observa la cuenta y anima desde el último botón tocado
   let from = null;
   document.addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-add], [data-opts-add]'); if (b) { const r = b.getBoundingClientRect(); from = { x: r.left + r.width / 2, y: r.top + r.height / 2 }; } }, true);

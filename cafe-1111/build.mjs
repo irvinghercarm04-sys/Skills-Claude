@@ -39,6 +39,57 @@ const ICONS = {
   comer: `<svg class="deco-ic deco-ic--sway" viewBox="0 0 96 96" aria-hidden="true"><ellipse cx="48" cy="44" rx="34" ry="16"/><ellipse cx="48" cy="44" rx="9" ry="4"/><path class="leaf" d="M16 60c8 6 20 8 32 8s24-2 32-8"/><path class="leaf" d="M18 66c4 3 10 6 14 4s6-6 10-4 8 6 12 4 6-6 10-4 8 4 14-1"/><path d="M14 74c8 7 21 10 34 10s26-3 34-10"/></svg>`,
   dulce: `<svg class="deco-ic deco-ic--candle" viewBox="0 0 96 96" aria-hidden="true"><path class="flame" d="M48 10c4 5 5 9 0 13-5-4-4-8 0-13z"/><path d="M48 23v12"/><path d="M18 52h60v32H18z"/><path d="M18 52c4 7 9 7 12 0 3 7 9 7 12 0 3 7 9 7 12 0 3 7 9 7 12 0 3 7 8 7 12 0"/><path d="M24 40h48v12H24z"/><path d="M12 84h72"/></svg>`,
 };
+ICONS.bebidas = `<svg class="deco-ic deco-ic--bubbles" viewBox="0 0 96 96" aria-hidden="true"><path d="M40 8h16v14l8 12v50a4 4 0 0 1-4 4H36a4 4 0 0 1-4-4V34l8-12z"/><path d="M32 48h32M32 68h32"/><circle class="bb bb1" cx="44" cy="62" r="2"/><circle class="bb bb2" cx="52" cy="58" r="1.8"/><circle class="bb bb3" cx="48" cy="64" r="1.5"/></svg>`;
+ICONS.salados = `<svg class="deco-ic deco-ic--sway" viewBox="0 0 96 96" aria-hidden="true"><circle cx="44" cy="52" r="26"/><path d="M70 52h18"/><circle class="leaf" cx="44" cy="52" r="10" fill="#e8b04a" stroke="#e8b04a"/><path d="M8 84h72"/></svg>`;
+const PHOTOS = {
+  chilaquiles: ['img/chilaquiles-780.webp', 'Chilaquiles verdes con huevo estrellado y aguacate en sartén de hierro', '50% 45%'],
+  latte: ['img/latte-780.webp', 'Latte en vaso de cristal con espuma y canela', '50% 40%'],
+  americano: ['img/americano-muffin-780.webp', 'Taza de café americano con muffin de elote', '30% 60%'],
+  muffin: ['img/americano-muffin-780.webp', 'Muffin de elote junto a un café americano', '85% 80%'],
+  espresso: ['assets/img/photo-m28989985-1200.webp', 'Espresso corriendo sobre una taza blanca', '62% 60%'],
+};
+const pick = (sid, gi) => sections.find((x) => x.id === sid).groups[gi];
+const TABS = [
+  { id: 'calientes', label: 'Calientes', h: 'Tómate algo calientito', note: 'Precios chico / grande. Personaliza tu bebida: Leche Entera o Deslactosada. Carga extra de café +$10.', groups: [pick('calientes', 0), pick('calientes', 1)] },
+  { id: 'frios', label: 'Frappés y fríos', h: 'Frappés, smoothies y granizados', note: 'Precios chico / grande.', groups: [pick('frios', 0), { label: 'Smoothies, granizados y chamoyadas', items: pick('frios', 1).items.slice(0, 3) }] },
+  { id: 'bebidas', label: 'Bebidas y cerveza', h: 'Aguas, refrescos, cerveza y vino', groups: [{ label: 'Bebidas', items: pick('frios', 1).items.slice(3, 7) }, { label: 'Cerveza y vino', items: pick('frios', 1).items.slice(7) }] },
+  { id: 'comer', label: 'Bagels y chapatas', h: 'Bagels y chapatas', note: 'Promoción Arma tu Combo: elige tu Chapata o Bagel y por $35 más, añade Agua del día y Ensalada.', groups: [pick('comer', 0), pick('comer', 1)] },
+  { id: 'salados', label: 'Salados y ensaladas', h: 'Más salados y ensaladas', note: 'Todas las ensaladas llevan lechuga y espinaca.', groups: [pick('comer', 2), { label: 'Ensaladas', items: pick('comer', 3).items }] },
+  { id: 'dulce', label: 'Dulce', h: 'Antojos dulces y postres', note: 'Los postres los vamos variando: pregunta por los postres del día.', groups: [pick('dulce', 0), pick('dulce', 1)], cakes: true },
+];
+
+function card(it) {
+  const ph = PHOTOS[it.id];
+  const btns = it.sizes.map(([label, p], i) =>
+    `<button class="add" type="button" data-add="${it.id}" data-size="${i}" aria-label="Agregar ${esc(it.name)}${label ? ' ' + esc(label) : ''}, ${money(p)}">` +
+    (label ? `<span class="add__size">${esc(label)}</span>` : '') + `<span class="add__price">${money(p)}</span>${PLUS}</button>`).join('');
+  return `<article class="mcard${ph ? ' mcard--photo' : ''}">` +
+    (ph ? `<figure class="mcard__pic"><img src="${ph[0]}" alt="${esc(ph[1])}" loading="lazy" decoding="async" style="object-position:${ph[2]}"></figure>` : '') +
+    `<div class="mcard__body"><h4 class="mcard__name">${esc(it.name)}</h4>` +
+    (it.desc ? `<p class="mcard__desc">${esc(it.desc)}</p>` : '') +
+    `<div class="mcard__adds">${btns}</div></div></article>`;
+}
+
+function menuBlock() {
+  const wa = `https://wa.me/522214378911?text=${encodeURIComponent('Hola Café 11•11, quiero pedir un pastel entero.')}`;
+  return `
+  <section class="section menu-x" id="menu" aria-labelledby="menu-h">
+    <div class="wrap">
+      <div class="menu-x__head">
+        <div><p class="menu-x__eyebrow">Precios en MXN</p><h2 id="menu-h">Nuestro menú</h2></div>
+        <p class="menu-x__lead">Desayuna, Lunchea, Come o Cena... Toca un precio para agregarlo a tu pedido.</p>
+      </div>
+      <div class="tabs-x" role="tablist" aria-label="Categorías del menú">
+        ${TABS.map((t, i) => `<button class="tab-x" role="tab" type="button" id="tab-${t.id}" aria-controls="${t.id}" aria-selected="${i === 0}" data-tab="${t.id}"><span class="tab-x__ic">${ICONS[t.id]}</span>${esc(t.label)}</button>`).join('')}
+      </div>
+      ${TABS.map((t, i) => `<div class="panel-x" role="tabpanel" id="${t.id}" aria-labelledby="tab-${t.id}"${i ? ' hidden' : ''}>
+        <div class="panel-x__head"><h3>${esc(t.h)}</h3>${t.note ? `<p>${esc(t.note)}</p>` : ''}</div>
+        ${t.groups.map((g) => `<p class="panel-x__label">${esc(g.label)}</p><div class="mgrid">${g.items.map(card).join('')}</div>`).join('')}
+        ${t.cakes ? `<div class="cakes-x"><span class="cakes-x__ic">${ICONS.dulce}</span><div><h4>¡Pasteles enteros!</h4><p>Hacemos tu postre favorito sobre pedido.</p></div><a class="btn cakes-x__btn" href="${wa}" target="_blank" rel="noopener">Encargar por WhatsApp</a></div>` : ''}
+      </div>`).join('\n      ')}
+    </div>
+  </section>`;
+}
 const MAPS = 'https://maps.app.goo.gl/JHZndEco7oGyx8NG9?g_st=ac';
 const DIDI = 'https://web.didiglobal.com/mx/food/';
 
@@ -173,7 +224,7 @@ const html = `<!doctype html>
       </div>
     </div>
   </section>
-${sections.map(menuSection).join('\n')}
+${menuBlock()}
 </main>
 
 <footer class="footer closing" id="contacto" aria-labelledby="close-h">

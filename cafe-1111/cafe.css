@@ -342,3 +342,5 @@ html, body { overflow-x: clip; }
 .mgrid { grid-auto-flow: row dense; }
 .mcard__body { min-width: 0; }
 @media (max-width: 639px) { .mcard__body, .mcard--photo .mcard__body { flex: 1 1 0; } }
+/* portada: el banner ya trae el logotipo; en pantallas angostas se enfoca en el logo */
+@media (max-width: 1023px) { .hero__bg--banner { object-position: 92% 50% !important; } }

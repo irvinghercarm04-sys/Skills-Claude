@@ -344,3 +344,35 @@ html, body { overflow-x: clip; }
 @media (max-width: 639px) { .mcard__body, .mcard--photo .mcard__body { flex: 1 1 0; } }
 /* portada: el banner ya trae el logotipo; en pantallas angostas se enfoca en el logo */
 @media (max-width: 1023px) { .hero__bg--banner { object-position: 92% 50% !important; } }
+
+/* ============ ubicación ============ */
+.ubic { height: auto !important; min-height: 0 !important; padding-block: 96px; }
+.ubic__head { display: flex; align-items: end; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; margin-bottom: 32px; }
+.ubic__head h2 { margin: 0; font-size: clamp(40px, 5vw, 72px); line-height: 1; letter-spacing: -0.03em; }
+.ubic__map { position: relative; display: block; height: clamp(320px, 42vw, 520px); border-radius: 24px; overflow: hidden; color: inherit;
+  background: #e9e1d3; box-shadow: 0 30px 60px -40px rgb(28 26 23 / .6); transition: transform 300ms cubic-bezier(.2,.7,.2,1); }
+.ubic__map:hover { transform: translateY(-3px); }
+.ubic__map iframe { width: 100%; height: 100%; border: 0; display: block; }
+.ubic__art { width: 100%; height: 100%; display: block; }
+.m-ground { fill: #efe8db; }
+.m-block { fill: #e2d8c6; }
+.m-park { fill: #cfdcc8; }
+.m-tree { fill: #9fbb98; }
+.m-road { fill: none; stroke: #fbf8f2; stroke-width: 22; }
+.m-road--main { stroke-width: 34; }
+.m-route { fill: none; stroke: #2f5f57; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 2 16; animation: route 1.2s linear infinite; }
+@keyframes route { to { stroke-dashoffset: -18; } }
+.m-pulse { fill: #2f5f57; opacity: .25; transform-origin: 600px 260px; animation: pulse 2s ease-out infinite; }
+@keyframes pulse { from { transform: scale(.6); opacity: .45; } to { transform: scale(3); opacity: 0; } }
+.ubic__pin { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -100%); display: grid; place-items: center; width: 72px; height: 72px; margin-top: -8px;
+  border-radius: 50% 50% 50% 0; rotate: -45deg; background: #1c1a17; color: #f4efe6; box-shadow: 0 12px 24px -10px rgb(0 0 0 / .6); animation: drop .9s cubic-bezier(.3,1.5,.5,1) both; }
+.ubic__pin svg { width: 40px; height: 16px; fill: currentColor; rotate: 45deg; }
+@keyframes drop { from { translate: 0 -60px; opacity: 0; } }
+.ubic__tag { position: absolute; left: 24px; bottom: 24px; padding: 12px 18px; border-radius: 999px; background: #1c1a17; color: #f4efe6; font-size: 15px; font-weight: 500; }
+@media (prefers-reduced-motion: reduce) { .m-route, .m-pulse, .ubic__pin { animation: none; } .ubic__map { transition: none; } }
+@media (max-width: 639px) {
+  .ubic { padding-block: 64px; }
+  .ubic__head .btn { width: 100%; justify-content: center; }
+  .ubic__map { height: 360px; border-radius: 18px; }
+  .ubic__tag { left: 12px; right: 12px; bottom: 12px; text-align: center; font-size: 14px; }
+}

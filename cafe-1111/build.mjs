@@ -91,7 +91,9 @@ function menuBlock() {
   </section>`;
 }
 const MAPS = 'https://maps.app.goo.gl/JHZndEco7oGyx8NG9?g_st=ac';
-const DIDI = 'https://web.didiglobal.com/mx/food/';
+// Mapa: pon aquí la dirección o coordenadas del café (ej. 'Calle 5 Sur 1101, Puebla' o '19.0414,-98.2063')
+// y se mostrará un mapa de Google incrustado. Vacío = mapa ilustrado con botón a Google Maps.
+const MAP_QUERY = '';
 
 const html = `<!doctype html>
 <html lang="es" data-type="place" data-radius="soft" data-buttons="arrow" data-motion>
@@ -99,7 +101,7 @@ const html = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Café 11•11: café, desayunos y antojos</title>
-<meta name="description" content="Café de especialidad, chilaquiles, bagels, chapatas y postres. Arma tu pedido en línea y envíalo por WhatsApp, o pide a domicilio por DiDi Food.">
+<meta name="description" content="Café de especialidad, chilaquiles, bagels, chapatas y postres. Arma tu pedido en línea y envíalo por WhatsApp.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Café 11•11: café, desayunos y antojos">
 <meta property="og:description" content="Life is too short for bad coffee. Arma tu pedido y envíalo por WhatsApp.">
@@ -148,7 +150,7 @@ const html = `<!doctype html>
       <div class="nav__item"><a class="nav__link" href="#frios">Fríos</a></div>
       <div class="nav__item"><a class="nav__link" href="#comer">Para comer</a></div>
       <div class="nav__item"><a class="nav__link" href="#dulce">Dulce</a></div>
-      <div class="nav__item"><a class="nav__link" href="#visita">Visítanos</a></div>
+      <div class="nav__item"><a class="nav__link" href="#ubicacion">Ubicación</a></div>
     </nav>
     <div class="nav__actions">
       <button class="btn btn--primary cart-open" type="button" data-cart-open>Ver pedido <span class="cart-count" data-cart-count>0</span></button>
@@ -170,31 +172,10 @@ const html = `<!doctype html>
     </div></div>
   </section>
 
-  <section class="section" id="visita" data-place="visit" aria-labelledby="visita-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="visita-h">Visítanos</h2></div>
-      <div class="grid visit-split">
-        <div class="visit visit--card span-6">
-          <p class="visit__quote">Life is too short for bad coffee.</p>
-          <ul class="visit__rows">
-            <li><span>Ubicación</span><a class="link" href="${MAPS}" target="_blank" rel="noopener">Abrir en Google Maps</a></li>
-            <li><span>A domicilio</span><a class="link" href="${DIDI}" target="_blank" rel="noopener">Pedir en DiDi Food</a></li>
-            <li><span>Pedido por WhatsApp</span><a class="link" href="#calientes">Elegir del menú</a></li>
-            <li><span>Pasteles enteros</span><a class="link" href="#dulce">Sobre pedido</a></li>
-          </ul>
-        </div>
-        <!-- CLIENT SLOT: fotografía de la fachada con el toldo negro y el logotipo de Café 11•11.
-             Guarda el archivo como img/fachada.jpg y cambia este src. Mientras tanto: foto de muestra (stand-in). -->
-        <a class="frame frame--photo span-6 start-7 pl-photo" href="${MAPS}" target="_blank" rel="noopener" aria-label="Ver Café 11•11 en Google Maps">
-          <img class="frame__img" src="assets/img/photo-m187311853-1200.webp" width="1200" height="800" sizes="(max-width: 639px) 100vw, 50vw" alt="Manos de barista compactando café molido en el portafiltro junto a la máquina de espresso" loading="lazy" decoding="async" data-source="library-057" data-subject="bar" style="object-position: 58% 50%">
-        </a>
-      </div>
-    </div>
-  </section>
 
   <div class="ribbon" aria-hidden="true">
     <div class="ribbon__track">
-      ${Array(2).fill('<span>Life is too short for bad coffee</span><i>✦</i><span>Desayuna, Lunchea, Come o Cena...</span><i>✦</i><span>¡Pasteles enteros sobre pedido!</span><i>✦</i><span>A domicilio por DiDi Food</span><i>✦</i>').join('')}
+      ${Array(2).fill('<span>Life is too short for bad coffee</span><i>✦</i><span>Desayuna, Lunchea, Come o Cena...</span><i>✦</i><span>¡Pasteles enteros sobre pedido!</span><i>✦</i><span>Pide por WhatsApp</span><i>✦</i>').join('')}
     </div>
   </div>
 
@@ -221,6 +202,28 @@ const html = `<!doctype html>
     </div>
   </section>
 ${menuBlock()}
+  <section class="section ubic" id="ubicacion" aria-labelledby="ubic-h">
+    <div class="wrap">
+      <div class="ubic__head">
+        <h2 id="ubic-h">Encuéntranos</h2>
+        <a class="btn btn--primary" href="${MAPS}" target="_blank" rel="noopener">Abrir en Google Maps${ARROW}</a>
+      </div>
+      <a class="ubic__map" href="${MAPS}" target="_blank" rel="noopener" aria-label="Ver la ubicación de Café 11•11 en Google Maps">
+        ${MAP_QUERY ? `<iframe title="Mapa de Café 11•11" src="https://www.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&z=17&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : `<svg class="ubic__art" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="1200" height="520" class="m-ground"/>
+          <path class="m-park" d="M820 40h260v170H820z"/><circle class="m-tree" cx="870" cy="90" r="14"/><circle class="m-tree" cx="930" cy="140" r="18"/><circle class="m-tree" cx="1010" cy="80" r="12"/><circle class="m-tree" cx="1040" cy="160" r="16"/>
+          <path class="m-block" d="M40 40h220v150H40zM310 40h220v150H310zM580 40h190v150H580zM40 250h220v230H40zM310 250h160v100H310zM310 390h160v90H310zM820 270h260v210H820zM1120 40h80v440h-80z"/>
+          <path class="m-road" d="M0 220h1200M285 0v520M795 0v520M0 375h560"/>
+          <path class="m-road m-road--main" d="M-20 470C200 430 420 300 560 260s300-40 660-120"/>
+          <path class="m-route" d="M120 480C240 430 380 360 480 330s100-50 120-70"/>
+          <circle class="m-pulse" cx="600" cy="260" r="24"/>
+        </svg>
+        <span class="ubic__pin" aria-hidden="true"><svg viewBox="0 0 64 24"><circle cx="10" cy="12" r="7.2" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="10" cy="12" r="2.4"/><rect x="17.5" y="9" width="3" height="6" rx="1"/><rect x="20" y="10.6" width="38" height="2.8" rx="1.2"/><path d="M47 13.2h11.5v8.3h-3v-3.4h-2.4v3.4h-2.4v-5h-3.7z"/></svg></span>
+        <span class="ubic__tag">Café 11•11 · Toca para abrir el mapa</span>`}
+      </a>
+    </div>
+  </section>
+
 </main>
 
 <footer class="footer closing" id="contacto" aria-labelledby="close-h">
@@ -239,8 +242,8 @@ ${menuBlock()}
           <p class="footer__lede">Desayuna, Lunchea, Come o Cena...</p>
         </div>
         <div class="span-2 start-7 footer__col"><h3>Menú</h3><ul><li><a href="#calientes">Calientes</a></li><li><a href="#frios">Fríos</a></li><li><a href="#comer">Para comer</a></li><li><a href="#dulce">Dulce</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Pedidos</h3><ul><li><a href="#calientes">Por WhatsApp</a></li><li><a href="${DIDI}" target="_blank" rel="noopener">DiDi Food</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Visítanos</h3><ul><li><a href="${MAPS}" target="_blank" rel="noopener">Google Maps</a></li><li><a href="#visita">Cómo llegar</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Pedidos</h3><ul><li><a href="#calientes">Por WhatsApp</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Ubicación</h3><ul><li><a href="${MAPS}" target="_blank" rel="noopener">Google Maps</a></li><li><a href="#ubicacion">Cómo llegar</a></li></ul></div>
       </div>
       <div class="footer__legal">
         <span>&copy; 2026 Café 11•11</span>

@@ -1,0 +1,343 @@
+<!--
+  Escena: caja de pizza que cae, se abre y suelta humo.
+  Generada como marcado estático; edítala directamente.
+-->
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 35%, #4a2416 0%, #1c0d07 70%);
+      --outer: #c9945a;
+      --outer-dark: #a8743f;
+      --inner: #e6c590;
+      --inner-dark: #d4ad73;
+    }
+    #pz-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 55%, rgba(255, 170, 60, 0.35), rgba(255, 170, 60, 0) 55%);
+      opacity: 0;
+    }
+    #pz-camera {
+      position: absolute;
+      inset: 0;
+      perspective: 1500px;
+      perspective-origin: 50% 20%;
+    }
+    #pz-table {
+      position: absolute;
+      left: 540px;
+      top: 600px;
+      transform-style: preserve-3d;
+      transform: rotateX(52deg);
+    }
+    .pz-face {
+      position: absolute;
+    }
+    .pz-3d {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform-style: preserve-3d;
+    }
+    #pz-wood {
+      left: -1300px;
+      top: -1300px;
+      width: 2600px;
+      height: 2600px;
+      transform: translateZ(-1px);
+      background: repeating-linear-gradient(90deg, #5b3420 0 120px, #64391f 120px 124px, #6b3f24 124px 240px, #4e2b19 240px 244px);
+      -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 70%);
+      mask-image: radial-gradient(closest-side, #000 30%, transparent 70%);
+    }
+    #pz-shadow {
+      left: -320px;
+      top: -320px;
+      width: 640px;
+      height: 640px;
+      transform: translateZ(0.5px);
+      background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+    }
+    #pz-floor {
+      left: -280px;
+      top: -280px;
+      width: 560px;
+      height: 560px;
+      transform: translateZ(1px);
+      background: radial-gradient(circle, var(--inner) 60%, var(--inner-dark));
+    }
+    #pz-pizza {
+      left: -250px;
+      top: -250px;
+      width: 500px;
+      height: 500px;
+      transform: translateZ(3px);
+    }
+    .pz-wall {
+      left: -280px;
+      top: -32px;
+      width: 560px;
+      height: 64px;
+    }
+    #pz-wall-back {
+      transform: translate3d(0, -280px, 32px) rotateX(-90deg);
+      background: var(--inner-dark);
+    }
+    #pz-wall-left {
+      transform: translate3d(-280px, 0, 32px) rotateZ(90deg) rotateX(-90deg);
+      background: var(--inner);
+    }
+    #pz-wall-right {
+      transform: translate3d(280px, 0, 32px) rotateZ(90deg) rotateX(-90deg);
+      background: var(--inner);
+    }
+    #pz-wall-front {
+      transform: translate3d(0, 280px, 32px) rotateX(-90deg);
+      background: linear-gradient(var(--outer), var(--outer-dark));
+      box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a1606;
+      font: 700 22px/1 "Playfair Display", serif;
+      letter-spacing: 6px;
+    }
+    #pz-hinge {
+      transform: translate3d(0, -280px, 64px);
+    }
+    #pz-lid-faces {
+      transform: translate3d(0, 280px, 0);
+    }
+    .pz-lid-face {
+      left: -280px;
+      top: -280px;
+      width: 560px;
+      height: 560px;
+      backface-visibility: hidden;
+    }
+    #pz-lid-outer {
+      transform: translateZ(0.5px);
+      background: linear-gradient(160deg, var(--outer), var(--outer-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #pz-brand {
+      font: 700 34px "Playfair Display", serif;
+      letter-spacing: 4px;
+    }
+    #pz-lid-inner {
+      transform: translateZ(-0.5px) rotateY(180deg);
+      background: linear-gradient(var(--inner-dark), var(--inner));
+    }
+    #pz-lid-lip {
+      left: -280px;
+      top: -9px;
+      width: 560px;
+      height: 18px;
+      transform: translate3d(0, 280px, -9px) rotateX(-90deg);
+      background: var(--outer-dark);
+    }
+    #pz-steam-layer {
+      position: absolute;
+      left: 190px;
+      top: -90px;
+      width: 700px;
+      height: 800px;
+      pointer-events: none;
+    }
+    #pz-title-clip {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 70px;
+      text-align: center;
+    }
+    #pz-title {
+      display: inline-block;
+      font: 700 72px/1.1 "Playfair Display", serif;
+      color: #ffe2a8;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="pizza"
+    data-width="1080"
+    data-height="1080"
+    data-composition-variables='[
+      {"id":"title","type":"string","label":"Título","default":"¡Recién horneada!","maxLength":24},
+      {"id":"brand","type":"string","label":"Marca en la tapa","default":"PIZZA","maxLength":10},
+      {"id":"tagline","type":"string","label":"Texto del frente","default":"HOT &amp; FRESH","maxLength":20}
+    ]'
+  >
+    <div id="pz-glow"></div>
+    <div id="pz-camera" data-layout-allow-overflow>
+      <div id="pz-table">
+        <div id="pz-wood" class="pz-face" data-layout-ignore></div>
+        <div id="pz-drop" class="pz-3d">
+          <div id="pz-shadow" class="pz-face"></div>
+          <div id="pz-floor" class="pz-face"></div>
+          <div id="pz-pizza" class="pz-face">
+            <svg id="pizza-art" width="500" height="500" viewBox="-250 -250 500 500">
+              <defs>
+                <radialGradient id="pz-crust" r="0.5"><stop offset="0.78" stop-color="#e9a74e"/><stop offset="0.9" stop-color="#d18a36"/><stop offset="1" stop-color="#9c5a1f"/></radialGradient>
+                <radialGradient id="pz-cheese" r="0.5"><stop offset="0" stop-color="#fff2b8"/><stop offset="0.75" stop-color="#ffd86b"/><stop offset="1" stop-color="#f0b443"/></radialGradient>
+                <radialGradient id="pz-pep" r="0.5"><stop offset="0" stop-color="#c4382a"/><stop offset="0.8" stop-color="#a8261c"/><stop offset="1" stop-color="#7a1610"/></radialGradient>
+              </defs>
+              <circle r="246" fill="#f4ead4" opacity="0.7"/>
+              <circle r="236" fill="url(#pz-crust)"/>
+              <circle r="208" fill="#c8341f"/>
+              <path d="M199.4,0.0L200.7,26.4L191.2,51.2L182.5,75.6L170.6,98.5L150.5,115.5L132.8,132.8L120.6,157.2L102.4,177.3L76.3,184.1L50.4,188.0L25.5,193.7L0.0,192.2L-24.6,187.1L-50.8,189.6L-78.6,189.8L-100.7,174.4L-117.4,153.0L-136.2,136.2L-153.8,118.0L-165.6,95.6L-180.2,74.6L-197.5,52.9L-201.6,26.5L-192.6,0.0L-187.9,-24.7L-187.4,-50.2L-179.6,-74.4L-168.9,-97.5L-160.5,-123.1L-144.4,-144.4L-118.0,-153.8L-93.6,-162.2L-73.8,-178.1L-51.1,-190.7L-25.7,-194.9L-0.0,-199.8L26.5,-201.5L50.6,-189.0L71.4,-172.3L95.3,-165.1L121.3,-158.0L141.0,-141.0L157.2,-120.6L173.9,-100.4L182.0,-75.4L181.1,-48.5L187.0,-24.6L199.4,-0.0Z" fill="url(#pz-cheese)"/>
+              <line x1="-236" x2="236" stroke="#b87a2a" stroke-opacity="0.35" stroke-width="3" transform="rotate(0)"/>
+              <line x1="-236" x2="236" stroke="#b87a2a" stroke-opacity="0.35" stroke-width="3" transform="rotate(45)"/>
+              <line x1="-236" x2="236" stroke="#b87a2a" stroke-opacity="0.35" stroke-width="3" transform="rotate(90)"/>
+              <line x1="-236" x2="236" stroke="#b87a2a" stroke-opacity="0.35" stroke-width="3" transform="rotate(135)"/>
+              <g transform="translate(0 -120)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(105 -70)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(-110 -60)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(60 40)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(-50 70)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(130 75)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(-140 55)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(10 150)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(-20 -20)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(100 -150)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(-90 -165)"><circle r="27" fill="url(#pz-pep)"/><circle r="4" cx="-8" cy="-6" fill="#7a1610" opacity="0.6"/><circle r="3" cx="9" cy="5" fill="#7a1610" opacity="0.6"/><ellipse rx="9" ry="5" cx="-6" cy="-12" fill="#fff" opacity="0.25"/></g>
+              <g transform="translate(-160 -10)"><circle r="11" fill="#2b2420"/><circle r="4.5" fill="#5a4a3a"/></g>
+              <g transform="translate(30 100)"><circle r="11" fill="#2b2420"/><circle r="4.5" fill="#5a4a3a"/></g>
+              <g transform="translate(160 20)"><circle r="11" fill="#2b2420"/><circle r="4.5" fill="#5a4a3a"/></g>
+              <g transform="translate(-30 -165)"><circle r="11" fill="#2b2420"/><circle r="4.5" fill="#5a4a3a"/></g>
+              <g transform="translate(70 -110)"><circle r="11" fill="#2b2420"/><circle r="4.5" fill="#5a4a3a"/></g>
+              <g transform="translate(-120 110)"><circle r="11" fill="#2b2420"/><circle r="4.5" fill="#5a4a3a"/></g>
+              <g transform="translate(40 -60) rotate(20)"><path d="M-18,0 Q0,-14 18,0 Q0,14 -18,0Z" fill="#3f8f3a"/><path d="M-16,0 L16,0" stroke="#2c6b28" stroke-width="1.5"/></g>
+              <g transform="translate(-80 10) rotate(-40)"><path d="M-18,0 Q0,-14 18,0 Q0,14 -18,0Z" fill="#3f8f3a"/><path d="M-16,0 L16,0" stroke="#2c6b28" stroke-width="1.5"/></g>
+              <g transform="translate(80 130) rotate(70)"><path d="M-18,0 Q0,-14 18,0 Q0,14 -18,0Z" fill="#3f8f3a"/><path d="M-16,0 L16,0" stroke="#2c6b28" stroke-width="1.5"/></g>
+              <g transform="translate(-60 140) rotate(10)"><path d="M-18,0 Q0,-14 18,0 Q0,14 -18,0Z" fill="#3f8f3a"/><path d="M-16,0 L16,0" stroke="#2c6b28" stroke-width="1.5"/></g>
+              <g transform="translate(150 -10) rotate(-30)"><path d="M-18,0 Q0,-14 18,0 Q0,14 -18,0Z" fill="#3f8f3a"/><path d="M-16,0 L16,0" stroke="#2c6b28" stroke-width="1.5"/></g>
+              <circle id="pz-bubble-0" class="pz-bubble" cx="-40" cy="20" r="4" fill="#fff6cc" opacity="0"/>
+              <circle id="pz-bubble-1" class="pz-bubble" cx="70" cy="-20" r="4" fill="#fff6cc" opacity="0"/>
+              <circle id="pz-bubble-2" class="pz-bubble" cx="-100" cy="-110" r="4" fill="#fff6cc" opacity="0"/>
+              <circle id="pz-bubble-3" class="pz-bubble" cx="120" cy="130" r="4" fill="#fff6cc" opacity="0"/>
+              <circle id="pz-bubble-4" class="pz-bubble" cx="-150" cy="100" r="4" fill="#fff6cc" opacity="0"/>
+            </svg>
+          </div>
+          <div id="pz-wall-back" class="pz-face pz-wall"></div>
+          <div id="pz-wall-left" class="pz-face pz-wall"></div>
+          <div id="pz-wall-right" class="pz-face pz-wall"></div>
+          <div id="pz-wall-front" class="pz-face pz-wall" data-var-text="tagline" data-layout-ignore>HOT &amp; FRESH</div>
+          <div id="pz-hinge" class="pz-3d">
+            <div id="pz-lid" class="pz-3d">
+              <div id="pz-lid-faces" class="pz-3d">
+                <div id="pz-lid-outer" class="pz-face pz-lid-face">
+                  <svg width="330" height="330" viewBox="-165 -165 330 330">
+                    <circle r="150" fill="#b3261e"/>
+                    <circle r="136" fill="none" stroke="#f6e7c8" stroke-width="4" stroke-dasharray="10 8"/>
+                    <path d="M0,-70 L60,40 Q0,62 -60,40 Z" fill="#f6c453" stroke="#f6e7c8" stroke-width="6" stroke-linejoin="round"/>
+                    <circle cx="-10" cy="0" r="10" fill="#b3261e"/><circle cx="18" cy="22" r="9" fill="#b3261e"/><circle cx="-22" cy="30" r="8" fill="#b3261e"/>
+                    <text id="pz-brand" data-layout-ignore y="98" text-anchor="middle" fill="#f6e7c8" data-var-text="brand">PIZZA</text>
+                  </svg>
+                </div>
+                <div id="pz-lid-inner" class="pz-face pz-lid-face"></div>
+                <div id="pz-lid-lip" class="pz-face"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="pz-steam-layer">
+        <svg id="pz-steam" width="700" height="800" viewBox="-350 -700 700 800">
+          <defs>
+            <filter id="pz-steam-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+            <linearGradient id="pz-steam-fade" x1="0" y1="100" x2="0" y2="-700" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.2" stop-color="#fff" stop-opacity="1"/>
+              <stop offset="0.75" stop-color="#fff" stop-opacity="0.6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            </linearGradient>
+            <mask id="pz-steam-mask"><rect x="-350" y="-700" width="700" height="800" fill="url(#pz-steam-fade)"/></mask>
+          </defs>
+          <g mask="url(#pz-steam-mask)">
+            <path id="pz-wisp-0" class="pz-wisp" d="M0,0" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" opacity="0" filter="url(#pz-steam-blur)"/>
+            <path id="pz-wisp-1" class="pz-wisp" d="M0,0" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" opacity="0" filter="url(#pz-steam-blur)"/>
+            <path id="pz-wisp-2" class="pz-wisp" d="M0,0" fill="none" stroke="#fff" stroke-width="38" stroke-linecap="round" opacity="0" filter="url(#pz-steam-blur)"/>
+            <path id="pz-wisp-3" class="pz-wisp" d="M0,0" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" opacity="0" filter="url(#pz-steam-blur)"/>
+            <path id="pz-wisp-4" class="pz-wisp" d="M0,0" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" opacity="0" filter="url(#pz-steam-blur)"/>
+            <path id="pz-wisp-5" class="pz-wisp" d="M0,0" fill="none" stroke="#fff" stroke-width="38" stroke-linecap="round" opacity="0" filter="url(#pz-steam-blur)"/>
+            <path id="pz-wisp-6" class="pz-wisp" d="M0,0" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" opacity="0" filter="url(#pz-steam-blur)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div id="pz-title-clip" class="clip" data-start="3.4" data-duration="3.6" data-track-index="1">
+      <h1 id="pz-title" data-var-text="title">¡Recién horneada!</h1>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // 0.0 s — la caja cae sobre la mesa
+      tl.fromTo("#pz-drop", { z: 900, scale: 0.85 }, { z: 0, duration: 0.9, ease: "bounce.out" }, 0);
+      tl.fromTo("#pz-drop", { scale: 0.85 }, { scale: 1, duration: 0.9, ease: "power2.out", immediateRender: false }, 0);
+
+      // 1.25 s — anticipación: la tapa se levanta un poco dos veces
+      tl.fromTo("#pz-lid", { rotationX: 0, transformOrigin: "0px 0px" }, { rotationX: 9, duration: 0.14, ease: "power2.out" }, 1.25);
+      tl.fromTo("#pz-lid", { rotationX: 9 }, { rotationX: 0, duration: 0.18, ease: "bounce.out", immediateRender: false }, 1.39);
+      tl.fromTo("#pz-lid", { rotationX: 0 }, { rotationX: 14, duration: 0.16, ease: "power2.out", immediateRender: false }, 1.7);
+      tl.fromTo("#pz-lid", { rotationX: 14 }, { rotationX: 0, duration: 0.2, ease: "bounce.out", immediateRender: false }, 1.86);
+
+      // 2.25 s — se abre
+      tl.fromTo("#pz-lid", { rotationX: 0 }, { rotationX: 112, duration: 1.0, ease: "back.out(1.6)", immediateRender: false }, 2.25);
+      tl.fromTo("#pz-glow", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" }, 2.4);
+
+      // Cámara: se acerca hasta que la caja está abierta y luego se queda quieta
+      tl.fromTo("#pz-camera", { scale: 0.92 }, { scale: 1, duration: 3.4, ease: "power2.inOut" }, 0);
+
+      // 3.4 s — título: la línea entera entra desenfocada y aterriza quieta
+      tl.fromTo(
+        "#pz-title",
+        { opacity: 0, y: 24, filter: "blur(10px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "expo.out" },
+        3.4,
+      );
+
+      // Humo y burbujas: función pura del tiempo, dibujada en cada seek
+      const wisps = Array.from({ length: 7 }, (_, i) => document.getElementById("pz-wisp-" + i));
+      const bubbles = Array.from({ length: 5 }, (_, i) => document.getElementById("pz-bubble-" + i));
+      const clamp = (v) => Math.max(0, Math.min(1, v));
+      const ease = (v) => v * v * (3 - 2 * v);
+
+      function renderAt(t) {
+        const frame = t * 30;
+        const amount = ease(clamp((t - 2.45) / 1.2));
+        const heat = ease(clamp((t - 2.4) / 0.8));
+        wisps.forEach((el, i) => {
+          const period = 75 + (i % 3) * 12;
+          const p = ((frame + ((i * 37) % period)) % period) / period;
+          const xBase = ((i * 71) % 280) - 140;
+          const pts = [];
+          for (let k = 0; k <= 24; k++) {
+            const s = k / 24;
+            const x = Math.sin(s * 5.5 + frame / 11 + i * 1.3) * (10 + s * 38);
+            pts.push(x.toFixed(1) + "," + (-s * 380).toFixed(1));
+          }
+          el.setAttribute("d", "M" + pts.join("L"));
+          el.setAttribute("transform", "translate(" + xBase + " " + (-p * 260).toFixed(1) + ") scale(" + (0.8 + p * 0.5).toFixed(3) + ")");
+          el.setAttribute("opacity", (Math.sin(Math.PI * p) * 0.85 * amount).toFixed(3));
+        });
+        bubbles.forEach((el, i) => {
+          const b = (Math.sin(frame / 7 + i * 1.7) + 1) / 2;
+          el.setAttribute("r", (4 + b * 5).toFixed(2));
+          el.setAttribute("opacity", (heat * (0.3 + b * 0.5)).toFixed(3));
+        });
+      }
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      renderAt(0);
+
+      window.__timelines["pizza"] = tl;
+    })();
+  </script>
+</template>

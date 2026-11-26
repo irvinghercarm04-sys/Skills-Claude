@@ -376,3 +376,21 @@ html, body { overflow-x: clip; }
   .ubic__map { height: 360px; border-radius: 18px; }
   .ubic__tag { left: 12px; right: 12px; bottom: 12px; text-align: center; font-size: 14px; }
 }
+
+/* ============ botón secreto ============ */
+.secret-btn { position: absolute; z-index: 3; left: max(24px, calc((100vw - 1200px) / 2)); top: calc(var(--nav, 72px) + 24px);
+  display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 20px 0 10px; border: 0; border-radius: 999px; cursor: pointer;
+  background: #3b2314; color: #f6e7d3; font: 600 15px/1 var(--font-text); letter-spacing: .01em;
+  box-shadow: 0 0 0 3px rgb(246 231 211 / .35), 0 14px 30px -12px rgb(30 15 5 / .8); animation: secretWiggle 4s ease-in-out 2s infinite;
+  transition: transform 160ms var(--ease), background-color 160ms var(--ease); }
+.secret-btn:hover { background: #5a3520; transform: translateY(-2px) scale(1.03); }
+.secret-btn:active { transform: scale(.95); }
+.secret-btn:focus-visible { outline: 3px solid #d9b27c; outline-offset: 3px; }
+.secret-btn__bean { width: 30px; height: 30px; border-radius: 50%; background: #f6e7d3; position: relative; flex: none; }
+.secret-btn__bean::before { content: ""; position: absolute; inset: 7px 9px; border-radius: 50%; background: #5a3520; transform: rotate(30deg); }
+.secret-btn__bean::after { content: ""; position: absolute; left: 14px; top: 8px; width: 2px; height: 14px; border-radius: 2px; background: #f6e7d3; transform: rotate(30deg); }
+@keyframes secretWiggle { 0%, 86%, 100% { rotate: 0deg; } 89% { rotate: -6deg; } 92% { rotate: 5deg; } 95% { rotate: -3deg; } }
+@media (max-width: 639px) { .secret-btn { left: 16px; top: calc(var(--nav, 56px) + 14px); height: 42px; font-size: 14px; } .secret-btn__bean { width: 26px; height: 26px; } .secret-btn__bean::before { inset: 6px 8px; } .secret-btn__bean::after { left: 12px; top: 7px; height: 12px; } }
+@media (prefers-reduced-motion: reduce) { .secret-btn { animation: none; } }
+.splash-layer { position: fixed; inset: 0; z-index: 1000; pointer-events: auto; cursor: pointer; }
+.splash-layer canvas { width: 100%; height: 100%; display: block; }

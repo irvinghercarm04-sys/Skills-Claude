@@ -30,6 +30,7 @@ h = h.replace('<script type="module" src="assets/motion/motion.js"></script>', (
 h = h.replace('<script type="module" src="assets/layout/layout.js"></script>\n', '');
 h = h.replace('<script src="cart.js" defer></script>', () => `<script>\ndocument.addEventListener('DOMContentLoaded', () => {\n${js('./cart.js')}\n});\n</script>`);
 h = h.replace('<script src="deco.js" defer></script>', () => `<script>\ndocument.addEventListener('DOMContentLoaded', () => {\n${js('./deco.js')}\n});\n</script>`);
+h = h.replace('<script src="secret.js" defer></script>', () => `<script>\ndocument.addEventListener('DOMContentLoaded', () => {\n${js('./secret.js')}\n});\n</script>`);
 h = h.replace('<meta property="og:image" content="share.jpg">\n', '');
 
 const left = h.match(/(?:src|href)="(?!https?:|data:|#|mailto:)[^"]+"/g);

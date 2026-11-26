@@ -163,6 +163,7 @@ const html = `<!doctype html>
 <main id="top">
   <section class="hero hero--place" data-enter aria-labelledby="hero-h">
     <img class="hero__bg hero__bg--banner" src="img/portada-1672.webp" srcset="img/portada-900.webp 900w, img/portada-1672.webp 1672w" sizes="100vw" width="1672" height="941" alt="Tazas de capuchino con arte latte sobre barra de madera junto al logotipo de Café 11•11 con la llave antigua" style="--ly-pos: 50% 50%" fetchpriority="high" data-source="client" data-subject="portada">
+    <button class="secret-btn" type="button" data-secret><span class="secret-btn__bean" aria-hidden="true"></span>Botón secreto</button>
     <div class="wrap"><div class="hero-text">
       <div class="hero__text">
         <h1 id="hero-h">Café, desayunos y antojos en <span class="swash">Café 11•11<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 14C60 4 120 4 170 9s90 6 126-3"/></svg></span></h1>
@@ -318,6 +319,7 @@ ${menuBlock()}
 <script type="module" src="assets/layout/layout.js"></script>
 <script src="cart.js" defer></script>
 <script src="deco.js" defer></script>
+<script src="secret.js" defer></script>
 </body>
 </html>
 `;

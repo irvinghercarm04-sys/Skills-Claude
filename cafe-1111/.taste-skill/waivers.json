@@ -1,0 +1,4 @@
+[
+  {"check": "phone-number", "target": "div.cakes.span-12 > a.link", "reason": "El cliente pidió explícitamente que los pedidos se envíen por WhatsApp al 2214378911; el número viene del brief."},
+  {"check": "copy-exclaim", "target": "¡Pasteles enteros!", "reason": "Texto literal del cliente: ¡PASTELES ENTEROS! viene en su menú."}
+]

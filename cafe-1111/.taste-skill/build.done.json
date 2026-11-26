@@ -1,0 +1,11 @@
+{
+ "page": "index.html",
+ "url": null,
+ "root": null,
+ "kind": "place",
+ "category": "café y desayunos",
+ "primary": "Hacer pedido",
+ "rounds": 3,
+ "start": "2026-11-26T11:15:30.445Z",
+ "by": "gate.mjs --start"
+}

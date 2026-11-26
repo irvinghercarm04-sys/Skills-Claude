@@ -17,11 +17,12 @@ function row(it) {
 }
 
 function menuSection(s, i) {
-  const big = s.id !== 'dulce';
+  const big = false;
   return `
-  <section class="section menu${big ? ' g2' : ''}" id="${s.id}" aria-labelledby="${s.id}-h">
+  <section class="section menu menu--${s.id}${big ? ' g2' : ''}" id="${s.id}" aria-labelledby="${s.id}-h">
     <div class="wrap">
-      <div class="section-head section-head--split">
+      <div class="section-head section-head--split menu__head">
+        ${ICONS[s.id] || ''}
         <div><h2 id="${s.id}-h">${esc(s.h2)}</h2><p>${esc(s.lead)}</p></div>
       </div>
       <div class="grid menu__groups">
@@ -32,6 +33,12 @@ function menuSection(s, i) {
   </section>`;
 }
 
+const ICONS = {
+  calientes: `<svg class="deco-ic deco-ic--steam" viewBox="0 0 96 96" aria-hidden="true"><path class="st st1" d="M36 34c-6-7 6-11 0-19"/><path class="st st2" d="M48 34c-6-7 6-11 0-19"/><path class="st st3" d="M60 34c-6-7 6-11 0-19"/><path d="M22 42h52v14a22 22 0 0 1-22 22h-8a22 22 0 0 1-22-22z"/><path d="M74 48h4a9 9 0 0 1 0 18h-6"/><path d="M16 86h64"/></svg>`,
+  frios: `<svg class="deco-ic deco-ic--bubbles" viewBox="0 0 96 96" aria-hidden="true"><path d="M30 30h36l-5 56H35z"/><path d="M26 30h44"/><path d="M53 30l9-22h8"/><path d="M32 46h32"/><circle class="bb bb1" cx="42" cy="70" r="2.5"/><circle class="bb bb2" cx="52" cy="62" r="2"/><circle class="bb bb3" cx="47" cy="76" r="1.8"/><path d="M32 30c0-8 7-12 16-12s16 4 16 12"/></svg>`,
+  comer: `<svg class="deco-ic deco-ic--sway" viewBox="0 0 96 96" aria-hidden="true"><ellipse cx="48" cy="44" rx="34" ry="16"/><ellipse cx="48" cy="44" rx="9" ry="4"/><path class="leaf" d="M16 60c8 6 20 8 32 8s24-2 32-8"/><path class="leaf" d="M18 66c4 3 10 6 14 4s6-6 10-4 8 6 12 4 6-6 10-4 8 4 14-1"/><path d="M14 74c8 7 21 10 34 10s26-3 34-10"/></svg>`,
+  dulce: `<svg class="deco-ic deco-ic--candle" viewBox="0 0 96 96" aria-hidden="true"><path class="flame" d="M48 10c4 5 5 9 0 13-5-4-4-8 0-13z"/><path d="M48 23v12"/><path d="M18 52h60v32H18z"/><path d="M18 52c4 7 9 7 12 0 3 7 9 7 12 0 3 7 9 7 12 0 3 7 9 7 12 0 3 7 8 7 12 0"/><path d="M24 40h48v12H24z"/><path d="M12 84h72"/></svg>`,
+};
 const MAPS = 'https://maps.app.goo.gl/JHZndEco7oGyx8NG9?g_st=ac';
 const DIDI = 'https://web.didiglobal.com/mx/food/';
 
@@ -108,8 +115,12 @@ const html = `<!doctype html>
   <section class="hero hero--place" data-enter aria-labelledby="hero-h">
     <img class="hero__bg" data-phone-fill src="img/chilaquiles-1200.webp" srcset="img/chilaquiles-780.webp 780w, img/chilaquiles-1200.webp 1200w" sizes="100vw" width="1200" height="1576" alt="Chilaquiles verdes en sartén de hierro con huevo estrellado y aguacate, junto a un latte con canela" style="--ly-pos: 50% 46%" fetchpriority="high" data-source="client" data-subject="chilaquiles y latte">
     <div class="wrap"><div class="hero-text">
+      <div class="badge" aria-hidden="true">
+        <svg class="badge__ring" viewBox="0 0 200 200"><defs><path id="badge-c" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs><text><textPath href="#badge-c">LIFE IS TOO SHORT FOR BAD COFFEE • CAFÉ 11•11 • </textPath></text></svg>
+        ${KEY}
+      </div>
       <div class="hero__text">
-        <h1 id="hero-h">Café, desayunos y antojos en Café 11•11</h1>
+        <h1 id="hero-h">Café, desayunos y antojos en <span class="swash">Café 11•11<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 14C60 4 120 4 170 9s90 6 126-3"/></svg></span></h1>
         <p class="hero__lead">Desayuna, Lunchea, Come o Cena... Chilaquiles verdes $89 y capuchino desde $43. Arma tu pedido aquí y envíalo por WhatsApp.</p>
         <div class="btn-row"><a class="btn btn--primary" href="#calientes">Armar mi pedido${ARROW}</a></div>
       </div>
@@ -137,6 +148,12 @@ const html = `<!doctype html>
       </div>
     </div>
   </section>
+
+  <div class="ribbon" aria-hidden="true">
+    <div class="ribbon__track">
+      ${Array(2).fill('<span>Life is too short for bad coffee</span><i>✦</i><span>Desayuna, Lunchea, Come o Cena...</span><i>✦</i><span>¡Pasteles enteros sobre pedido!</span><i>✦</i><span>A domicilio por DiDi Food</span><i>✦</i>').join('')}
+    </div>
+  </div>
 
   <section class="section" id="historia" data-moment="photo-chapters" aria-labelledby="historia-h">
     <div class="wrap mo-ph">
@@ -254,6 +271,7 @@ ${sections.map(menuSection).join('\n')}
 <script type="module" src="assets/motion/motion.js"></script>
 <script type="module" src="assets/layout/layout.js"></script>
 <script src="cart.js" defer></script>
+<script src="deco.js" defer></script>
 </body>
 </html>
 `;

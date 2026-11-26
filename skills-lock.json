@@ -43,26 +43,12 @@
       "skillPath": "skills/remotion-to-hyperframes/SKILL.md",
       "computedHash": "9fe6e78f8a3730a6365cf27127e393b75de28b70f1958595fe423f2b5fd2866e"
     },
-    "reverse-any-video": {
-      "source": "heygen-com/hyperframes",
-      "commit": "024d0637da09afc4823f64ddecb7a4f66bc47194",
-      "sourceType": "github",
-      "skillPath": "skills/reverse-any-video/SKILL.md",
-      "computedHash": "221f106c2b350432e566d8469f91c914978a868becd7fffe72f312ae105d1297"
-    },
     "slideshow": {
       "source": "heygen-com/hyperframes",
       "commit": "024d0637da09afc4823f64ddecb7a4f66bc47194",
       "sourceType": "github",
       "skillPath": "skills/slideshow/SKILL.md",
       "computedHash": "a7d87591e3b0ff9eaba32df4ca4dc6d46fbb8824751a37f5cede2cda20d434e5"
-    },
-    "style-sampling": {
-      "source": "heygen-com/hyperframes",
-      "commit": "024d0637da09afc4823f64ddecb7a4f66bc47194",
-      "sourceType": "github",
-      "skillPath": "skills/style-sampling/SKILL.md",
-      "computedHash": "433d429c44c3e43028f804b4f6a933994d1a7f2c891faef26ec04d42b26cefa2"
     }
   }
 }

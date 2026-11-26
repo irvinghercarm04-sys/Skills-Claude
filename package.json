@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "studio": "remotion studio src/index.ts",
-    "render": "remotion render src/index.ts PizzaBox out/pizza.mp4"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/irvinghercarm04-sys/Skills-Claude.git"
@@ -19,14 +15,7 @@
   },
   "homepage": "https://github.com/irvinghercarm04-sys/Skills-Claude#readme",
   "dependencies": {
-    "@remotion/cli": "^4.0.547",
     "gsap": "^3.15.1",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "remotion": "^4.0.547"
-  },
-  "devDependencies": {
-    "@types/react": "^19.3.3",
-    "typescript": "^7.0.2"
+    "hyperframes": "^0.9.98"
   }
 }

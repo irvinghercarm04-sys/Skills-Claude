@@ -138,7 +138,7 @@
     if (d) { const l = cart[+d.dataset.line]; l.qty += +d.dataset.d; if (l.qty < 1) cart.splice(+d.dataset.line, 1); }
     else if (r) cart.splice(+r.dataset.remove, 1);
     else return;
-    save(); render();
+    save(); render(); syncHref();
   });
 
   document.addEventListener('click', (e) => {
@@ -152,10 +152,9 @@
   // ---- send to WhatsApp
   const nameIn = $('#c-name'), nameErr = $('#c-name-err');
   nameIn.addEventListener('input', () => { if (nameIn.value.trim()) { nameErr.hidden = true; nameIn.removeAttribute('aria-invalid'); } });
-  $('[data-cart-send]').addEventListener('click', () => {
-    if (!cart.length) return;
+  const sendBtn = $('[data-cart-send]');
+  const message = () => {
     const name = nameIn.value.trim();
-    if (!name) { nameErr.hidden = false; nameIn.setAttribute('aria-invalid', 'true'); nameIn.focus(); return; }
     const notes = $('#c-notes').value.trim();
     const out = ['Hola Café 11•11, quiero hacer este pedido:', ''];
     cart.forEach((l) => {
@@ -164,10 +163,19 @@
     });
     out.push('', `*Total: ${fmt(total())} MXN*`, `A nombre de: ${name}`);
     if (notes) out.push(`Notas: ${notes}`);
-    const url = `https://wa.me/${WA}?text=${encodeURIComponent(out.join('\n'))}`;
-    const w = window.open(url, '_blank');
-    if (w) w.opener = null; else location.href = url;
+    return out.join('\n');
+  };
+  // a real link, so it opens WhatsApp everywhere (no popup blockers)
+  const syncHref = () => { sendBtn.href = `https://wa.me/${WA}?text=${encodeURIComponent(message())}`; };
+  ['input', 'change'].forEach((ev) => cartDlg.addEventListener(ev, syncHref));
+  sendBtn.addEventListener('pointerdown', syncHref);
+  sendBtn.addEventListener('focus', syncHref);
+  sendBtn.addEventListener('click', (e) => {
+    if (!cart.length) { e.preventDefault(); return; }
+    if (!nameIn.value.trim()) { e.preventDefault(); nameErr.hidden = false; nameIn.setAttribute('aria-invalid', 'true'); nameIn.focus(); return; }
+    syncHref();
   });
 
   render();
+  syncHref();
 })();

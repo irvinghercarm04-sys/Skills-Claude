@@ -216,7 +216,7 @@ h2 {
   line-height: 1;
   border-radius: 6px;
   transform: rotate(-4deg);
-  box-shadow: 0 10px 30px rgba(200, 32, 47, 0.25), inset 0 0 0 3px rgba(251, 233, 214, 0.85), inset 0 0 0 5px var(--red);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), inset 0 0 0 3px rgba(251, 233, 214, 0.85), inset 0 0 0 5px var(--red);
 }
 .scroll-hint {
   position: absolute;
@@ -241,7 +241,7 @@ h2 {
   position: absolute; inset: 0;
   background: var(--gold);
   transform: translateX(-100%);
-  animation: hint 2.6s var(--ease-in-out) infinite;
+  animation: hint 2.6s var(--ease-in-out) 3;
 }
 @keyframes hint { 0% { transform: translateX(-100%); } 60%, 100% { transform: translateX(100%); } }
 
@@ -470,7 +470,7 @@ h2 {
   padding: clamp(28px, 4vw, 52px);
 }
 .visit-main { display: grid; gap: 20px; align-content: start; justify-items: start; }
-.visit-title { font-size: clamp(64px, 9vw, 140px); }
+.visit-title { font-size: clamp(52px, 7vw, 112px); }
 address { font-style: normal; font-size: clamp(20px, 1.8vw, 26px); line-height: 1.3; color: rgba(243, 234, 216, 0.86); }
 .visit-hours h3 { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
 .hours { list-style: none; margin: 0; padding: 0; }

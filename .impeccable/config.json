@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "golden-coin/index.html"
+        ],
+        "createdAt": "2026-11-27T05:30:46.764Z",
+        "reason": "Claude decided: flagged lines are large condensed display type (word-scroll statement, one-line marquee, list/card headings at 34-46px); all body copy is 1.5"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "golden-coin/index.html"
+        ],
+        "createdAt": "2026-11-27T05:30:46.770Z",
+        "reason": "Claude decided: the .band is a deliberate edge-to-edge scrolling type strip, bleeding off both sides by design"
+      }
+    ]
+  }
+}

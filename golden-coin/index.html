@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Golden Coin · Cocina china en Los Pinos, Puebla</title>
+  <meta name="description" content="Golden Coin: cocina china en Los Pinos, Puebla. Desayuno, brunch, comida, cena, postre, bocadillos y platillos pequeños, con café, té, cerveza, vino y cócteles. Abierto de lunes a domingo de 8:00 a 21:00, en el local y para llevar.">
+  <meta name="theme-color" content="#0c0806">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23e3b341'/%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%239a6a12' stroke-width='3'/%3E%3Crect x='24' y='24' width='16' height='16' fill='%230c0806'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&display=swap&text=%E9%87%91%E5%B8%81%E7%A6%8F%E5%AF%BF%E6%97%A9%E9%A4%90%E5%8D%88%E9%A5%AD%E6%99%9A%E7%94%9C%E7%82%B9%E5%B0%8F%E5%90%83%E5%92%96%E5%95%A1%E8%8C%B6%E5%95%A4%E9%85%92%E8%91%A1%E8%90%84%E9%B8%A1%E5%B0%BE%E5%A4%96%E5%8D%96%E5%A0%82%E9%A3%9F%E6%97%A5">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="veil" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="#inicio" aria-label="Golden Coin, inicio">
+      <span class="brand-coin" aria-hidden="true"></span>
+      <span>Golden Coin</span>
+    </a>
+    <nav class="nav-links" aria-label="Secciones">
+      <a href="#servimos">Qué servimos</a>
+      <a href="#bebidas">Bebidas</a>
+      <a href="#visita">Visítanos</a>
+    </nav>
+    <span class="status" data-status><i></i><b>Lun–Dom · 8:00–21:00</b></span>
+  </header>
+
+  <main>
+    <!-- 1 · Hero -->
+    <section class="hero" id="inicio">
+      <div class="wrap hero-inner">
+        <p class="eyebrow" data-enter style="--d:0">Cocina china · Los Pinos, Puebla</p>
+        <h1 class="hero-title" aria-label="Golden Coin">
+          <span class="line"><span data-enter style="--d:1">Golden</span></span>
+          <span class="line"><span data-enter style="--d:2">Coin</span></span>
+        </h1>
+        <p class="hero-lead" data-enter style="--d:3">Desayuno, brunch, comida, cena y postre en un solo lugar, con café, té, cerveza, vino y cócteles para acompañar. Abierto todos los días.</p>
+        <div class="hero-actions" data-enter style="--d:4">
+          <a class="btn btn-gold" href="https://www.google.com/maps/search/?api=1&amp;query=Golden%20Coin%20Los%20Pinos%2072240%20Heroica%20Puebla%20de%20Zaragoza" target="_blank" rel="noopener">Cómo llegar</a>
+          <a class="btn btn-ghost" href="#servimos">Qué servimos</a>
+        </div>
+      </div>
+      <div class="seal" data-enter style="--d:5" aria-hidden="true"><span>金</span><span>币</span></div>
+      <div class="scroll-hint" aria-hidden="true"><span>Desliza</span><i></i></div>
+    </section>
+
+    <!-- 2 · Word scroll -->
+    <section class="words" aria-label="Golden Coin en una frase">
+      <div class="words-sticky">
+        <p class="words-text wrap" data-words>
+          Abrimos a las <em>ocho</em> con café y té caliente, seguimos con el <em>brunch</em>, la <em>comida</em> y la <em>cena</em>, y cerramos a las <em>nueve</em> con postre y un cóctel. Todo el día, todos los días.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3 · Qué servimos -->
+    <section class="menu-day" id="servimos">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Qué servimos</p>
+          <h2>Un día entero <br class="br-lg">en la mesa</h2>
+        </div>
+        <ol class="day-list">
+          <li data-reveal style="--i:0"><span class="when">Desde 8:00</span><span class="han" aria-hidden="true">早餐</span><h3>Desayuno</h3><p>Para empezar temprano, con algo caliente y una taza de café o té.</p></li>
+          <li data-reveal style="--i:1"><span class="when">Media mañana</span><span class="han" aria-hidden="true">早午</span><h3>Brunch</h3><p>Para quien llega tarde al desayuno y temprano a la comida.</p></li>
+          <li data-reveal style="--i:2"><span class="when">Mediodía</span><span class="han" aria-hidden="true">午饭</span><h3>Comida</h3><p>Para sentarse con calma o para llevarse de regreso al trabajo.</p></li>
+          <li data-reveal style="--i:3"><span class="when">Hasta 21:00</span><span class="han" aria-hidden="true">晚饭</span><h3>Cena</h3><p>La última comida del día, aquí mismo o en casa.</p></li>
+          <li data-reveal style="--i:4"><span class="when">Para cerrar</span><span class="han" aria-hidden="true">甜点</span><h3>Postre</h3><p>El final dulce de cualquiera de las anteriores.</p></li>
+          <li data-reveal style="--i:5"><span class="when">A cualquier hora</span><span class="han" aria-hidden="true">小吃</span><h3>Bocadillos y platillos pequeños</h3><p>Algo rápido para picar, compartir o acompañar una bebida.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 4 · Scroll marquee -->
+    <section class="band" aria-hidden="true">
+      <div class="band-row" data-band="-1"><span>Desayuno · Brunch · Comida · Cena · Postre · Bocadillos · Platillos pequeños · Desayuno · Brunch · Comida · Cena · Postre · </span></div>
+      <div class="band-row band-outline" data-band="1"><span>Café · Té · Cerveza · Vino · Cócteles · 咖啡 · 茶 · 啤酒 · Café · Té · Cerveza · Vino · Cócteles · 咖啡 · 茶 · 啤酒 · </span></div>
+    </section>
+
+    <!-- 5 · Bebidas -->
+    <section class="drinks" id="bebidas">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Para beber</p>
+          <h2>Algo para cada hora</h2>
+          <p class="section-lead">De la primera taza de la mañana a la última copa de la noche.</p>
+        </div>
+        <div class="drink-grid">
+          <article class="drink" data-reveal data-tilt style="--i:0"><span class="drink-han" aria-hidden="true">咖啡</span><h3>Café</h3><p>De la primera hora a la sobremesa.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:1"><span class="drink-han" aria-hidden="true">茶</span><h3>Té</h3><p>Una selección de tés para elegir el tuyo.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:2"><span class="drink-han" aria-hidden="true">啤酒</span><h3>Cerveza</h3><p>Bien fría, para la comida o la cena.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:3"><span class="drink-han" aria-hidden="true">葡萄酒</span><h3>Vino</h3><p>Para acompañar la mesa con calma.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:4"><span class="drink-han" aria-hidden="true">鸡尾酒</span><h3>Cócteles</h3><p>Para la tarde y la noche.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:5"><span class="drink-han" aria-hidden="true">酒</span><h3>Bebidas con alcohol</h3><p>Más opciones de bar para quien busca algo distinto.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · En el local o para llevar -->
+    <section class="service" id="servicio">
+      <div class="wrap service-grid">
+        <div class="service-card" data-reveal style="--i:0">
+          <span class="service-han" aria-hidden="true">堂食</span>
+          <h2>En el local</h2>
+          <p>Siéntate, pide y quédate el tiempo que quieras.</p>
+        </div>
+        <div class="service-card service-card--gold" data-reveal style="--i:1">
+          <span class="service-han" aria-hidden="true">外卖</span>
+          <h2>Para llevar</h2>
+          <p>Pide en el mostrador y llévatelo a casa o a la oficina.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · Wall moment -->
+    <section class="wall" id="muro" aria-label="Todos los días">
+      <p class="wall-type" data-reveal>Todos los días,<br>de <em>8</em> a <em>21</em>.</p>
+    </section>
+
+    <!-- 8 · Visita -->
+    <section class="visit" id="visita">
+      <div class="wrap visit-grid">
+        <div class="visit-main" data-reveal>
+          <p class="eyebrow">Visítanos</p>
+          <h2 class="visit-title">Los Pinos</h2>
+          <address>Los Pinos, 72240<br>Heroica Puebla de Zaragoza, Pue.</address>
+          <a class="btn btn-gold" href="https://www.google.com/maps/search/?api=1&amp;query=Golden%20Coin%20Los%20Pinos%2072240%20Heroica%20Puebla%20de%20Zaragoza" target="_blank" rel="noopener">Abrir en Google Maps</a>
+        </div>
+        <div class="visit-hours" data-reveal style="--i:1">
+          <h3>Horario</h3>
+          <ul class="hours" data-hours>
+            <li data-day="1"><span>Lunes</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="2"><span>Martes</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="3"><span>Miércoles</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="4"><span>Jueves</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="5"><span>Viernes</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="6"><span>Sábado</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="0"><span>Domingo</span><span>8:00 AM – 9:00 PM</span></li>
+          </ul>
+          <p class="visit-note"><span>En el local</span><span>Para llevar</span></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <span class="brand"><span class="brand-coin" aria-hidden="true"></span>Golden Coin</span>
+      <span>Cocina china · Los Pinos, Puebla</span>
+      <span>Lunes a domingo · 8:00–21:00</span>
+    </div>
+  </footer>
+
+  <script type="module" src="ui.js"></script>
+  <script type="module" src="scene.js"></script>
+</body>
+</html>

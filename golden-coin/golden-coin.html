@@ -1,0 +1,1501 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Golden Coin · Cocina china en Los Pinos, Puebla</title>
+  <meta name="description" content="Golden Coin: cocina china en Los Pinos, Puebla. Desayuno, brunch, comida, cena, postre, bocadillos y platillos pequeños, con café, té, cerveza, vino y cócteles. Abierto de lunes a domingo de 8:00 a 21:00, en el local y para llevar.">
+  <meta name="theme-color" content="#0c0806">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23e3b341'/%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%239a6a12' stroke-width='3'/%3E%3Crect x='24' y='24' width='16' height='16' fill='%230c0806'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&display=swap&text=%E9%87%91%E5%B8%81%E7%A6%8F%E5%AF%BF%E6%97%A9%E9%A4%90%E5%8D%88%E9%A5%AD%E6%99%9A%E7%94%9C%E7%82%B9%E5%B0%8F%E5%90%83%E5%92%96%E5%95%A1%E8%8C%B6%E5%95%A4%E9%85%92%E8%91%A1%E8%90%84%E9%B8%A1%E5%B0%BE%E5%A4%96%E5%8D%96%E5%A0%82%E9%A3%9F%E6%97%A5">
+  <style>
+:root {
+  --bg: #0c0806;
+  --bg-2: #15100c;
+  --paper: #f3ead8;
+  --paper-dim: rgba(243, 234, 216, 0.62);
+  --paper-faint: rgba(243, 234, 216, 0.14);
+  --gold: #e8b84a;
+  --gold-deep: #b9862a;
+  --red: #c8202f;
+  --line: rgba(243, 234, 216, 0.16);
+  --panel: rgba(12, 8, 6, 0.72);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --gutter: clamp(16px, 4vw, 64px);
+  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  --han: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--paper);
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-size: 17px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+h1, h2, h3, p { margin: 0; }
+::selection { background: var(--gold); color: var(--bg); }
+
+/* ---------- 3D canvas + veil ---------- */
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  background: radial-gradient(120% 80% at 70% 30%, #2a1a10 0%, var(--bg) 60%);
+}
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 50%, transparent 40%, rgba(12, 8, 6, 0.75) 100%),
+    linear-gradient(to right, rgba(12, 8, 6, 0.55), transparent 55%);
+}
+main, .foot, .nav { position: relative; z-index: 2; }
+main { text-shadow: 0 2px 18px rgba(12, 8, 6, 0.85); }
+.service-card, .drink:nth-child(2), .btn { text-shadow: none; }
+
+.wrap {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px var(--gutter);
+  padding-top: max(18px, env(safe-area-inset-top));
+  transition: background-color 300ms var(--ease-out), backdrop-filter 300ms var(--ease-out);
+}
+.nav.is-scrolled {
+  background: rgba(12, 8, 6, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+.brand-coin {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--bg), var(--bg)) center / 7px 7px no-repeat,
+    radial-gradient(circle at 35% 30%, #fbe3a0, var(--gold) 45%, var(--gold-deep) 100%);
+  box-shadow: inset 0 0 0 2px rgba(122, 80, 10, 0.55);
+}
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  text-decoration: none;
+  font-size: 15px;
+  color: var(--paper-dim);
+  background: linear-gradient(var(--gold), var(--gold)) left bottom / 0% 1px no-repeat;
+  padding-bottom: 2px;
+  transition: color 200ms var(--ease-out), background-size 250ms var(--ease-out);
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(12, 8, 6, 0.5);
+  white-space: nowrap;
+}
+.status b { font-weight: 500; }
+.status i {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--paper-dim);
+}
+.status.is-open i { background: #6fd68b; box-shadow: 0 0 0 0 rgba(111, 214, 139, 0.6); animation: ping 2.4s var(--ease-out) infinite; }
+.status.is-closed i { background: var(--red); }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(111, 214, 139, 0.55); } 70%, 100% { box-shadow: 0 0 0 8px rgba(111, 214, 139, 0); } }
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-links a:hover { color: var(--paper); background-size: 100% 1px; }
+}
+
+/* ---------- Shared type ---------- */
+.eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+h2 {
+  font-size: clamp(40px, 6.4vw, 96px);
+  line-height: 0.95;
+  font-weight: 750;
+  font-stretch: 80%;
+  letter-spacing: -0.03em;
+}
+.section-head { display: grid; gap: 18px; margin-bottom: clamp(40px, 6vw, 80px); }
+.section-lead { color: var(--paper-dim); font-size: 19px; max-width: 34ch; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 26px;
+  border-radius: 999px;
+  font-weight: 650;
+  font-size: 16px;
+  text-decoration: none;
+  transition: transform 160ms var(--ease-out), background-color 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: scale(0.97); }
+.btn-gold { background: var(--gold); color: #1a1006; }
+.btn-ghost { border: 1px solid rgba(243, 234, 216, 0.35); color: var(--paper); background: rgba(12, 8, 6, 0.35); }
+.btn:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .btn-gold:hover { background: #f3c95e; transform: translateY(-2px); }
+  .btn-ghost:hover { border-color: var(--paper); transform: translateY(-2px); }
+  .btn:active { transform: scale(0.97); }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 120px 0 90px;
+}
+.hero-inner { display: grid; gap: 26px; }
+.hero-title {
+  font-size: clamp(76px, 15.5vw, 232px);
+  line-height: 0.84;
+  font-weight: 800;
+  font-stretch: 78%;
+  letter-spacing: -0.045em;
+  display: grid;
+}
+.hero-title .line { display: block; overflow: hidden; padding-bottom: 0.04em; }
+.hero-title .line > span { display: inline-block; }
+.hero-title .line:last-child > span { color: var(--gold); }
+.hero-lead { font-size: clamp(18px, 1.5vw, 21px); max-width: 38ch; color: rgba(243, 234, 216, 0.82); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.seal {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 96px;
+  display: grid;
+  gap: 2px;
+  padding: 10px 9px;
+  background: var(--red);
+  color: #fbe9d6;
+  font-family: var(--han);
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 1;
+  border-radius: 6px;
+  transform: rotate(-4deg);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), inset 0 0 0 3px rgba(251, 233, 214, 0.85), inset 0 0 0 5px var(--red);
+}
+.scroll-hint {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+}
+.scroll-hint i {
+  width: 48px; height: 1px;
+  background: var(--paper-faint);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-hint i::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: var(--gold);
+  transform: translateX(-100%);
+  animation: hint 2.6s var(--ease-in-out) 3;
+}
+@keyframes hint { 0% { transform: translateX(-100%); } 60%, 100% { transform: translateX(100%); } }
+
+/* Hero entrance */
+[data-enter] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 90ms + 150ms);
+}
+.hero-title [data-enter] { transform: translateY(105%); transition-duration: 1100ms; opacity: 1; }
+.seal[data-enter] { transform: rotate(-4deg) scale(0.9); }
+.is-loaded [data-enter] { opacity: 1; transform: none; }
+.is-loaded .seal[data-enter] { transform: rotate(-4deg); }
+
+/* ---------- Word scroll ---------- */
+.words { height: 280vh; position: relative; }
+.words-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+}
+.words-text {
+  font-size: clamp(32px, 5.2vw, 78px);
+  line-height: 1.04;
+  font-weight: 700;
+  font-stretch: 85%;
+  letter-spacing: -0.03em;
+  max-width: 1320px;
+}
+.words-text em { font-style: normal; }
+.w {
+  display: inline-block;
+  color: var(--paper);
+  opacity: var(--o, 0.14);
+  transform: translateY(calc((1 - var(--o, 0.14)) * 0.12em));
+  will-change: opacity;
+}
+.w.is-key { color: var(--gold); }
+
+/* ---------- Day list ---------- */
+.menu-day { padding: clamp(80px, 12vw, 160px) 0; }
+.day-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.day-list li {
+  display: grid;
+  grid-template-columns: 170px 90px 1fr 1fr;
+  align-items: baseline;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.day-list li::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(var(--gutter) * -0.5);
+  background: rgba(232, 184, 74, 0.07);
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 250ms var(--ease-out);
+  pointer-events: none;
+}
+.when { font-size: 14px; color: var(--paper-dim); letter-spacing: 0.02em; }
+.han { font-family: var(--han); font-weight: 600; font-size: 22px; color: var(--gold); }
+.day-list h3 {
+  font-size: clamp(28px, 3.2vw, 46px);
+  font-weight: 700;
+  font-stretch: 82%;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  transition: transform 300ms var(--ease-out), color 200ms var(--ease-out);
+}
+.day-list p { color: var(--paper-dim); max-width: 40ch; }
+@media (hover: hover) and (pointer: fine) {
+  .day-list li:hover::before { opacity: 1; }
+  .day-list li:hover h3 { transform: translateX(8px); color: var(--gold); }
+}
+
+/* ---------- Scroll band ---------- */
+.band {
+  padding: 40px 0;
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  background: rgba(12, 8, 6, 0.55);
+}
+.band-row {
+  white-space: nowrap;
+  font-size: clamp(56px, 9vw, 140px);
+  font-weight: 800;
+  font-stretch: 75%;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  will-change: transform;
+}
+.band-row span { display: inline-block; }
+.band-outline { color: transparent; -webkit-text-stroke: 1.5px var(--gold); }
+
+/* ---------- Drinks ---------- */
+.drinks { padding: clamp(80px, 12vw, 160px) 0; }
+.drink-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  perspective: 1000px;
+}
+.drink {
+  position: relative;
+  min-height: 260px;
+  padding: 28px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(36, 26, 18, 0.92), rgba(16, 11, 8, 0.92));
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+  transition: transform 450ms var(--ease-out), border-color 250ms var(--ease-out);
+}
+.drink::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 0%), rgba(232, 184, 74, 0.16), transparent 50%);
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out);
+  pointer-events: none;
+}
+.drink-han {
+  position: absolute;
+  top: 18px; right: 22px;
+  font-family: var(--han);
+  font-weight: 900;
+  font-size: 64px;
+  line-height: 1;
+  color: var(--gold);
+  opacity: 0.9;
+  transform: translateZ(40px);
+}
+.drink h3 { font-size: 34px; font-weight: 700; font-stretch: 82%; letter-spacing: -0.02em; line-height: 1; transform: translateZ(24px); }
+.drink p { color: var(--paper-dim); transform: translateZ(12px); }
+.drink:nth-child(2) { background: linear-gradient(160deg, #f0dfb4, #e5c983); color: #1a1006; }
+.drink:nth-child(2) p { color: rgba(26, 16, 6, 0.7); }
+.drink:nth-child(2) .drink-han { color: var(--red); }
+.drink:nth-child(4) { background: linear-gradient(160deg, #b51c2a, #7d0f1a); border-color: rgba(255, 220, 200, 0.18); }
+.drink:nth-child(4) p { color: rgba(251, 233, 214, 0.78); }
+.drink:nth-child(4) .drink-han { color: #fbe3a0; }
+@media (hover: hover) and (pointer: fine) {
+  .drink:hover { --lift: -4px; border-color: rgba(232, 184, 74, 0.5); transition: transform 120ms linear, border-color 250ms var(--ease-out); }
+  .drink:hover::after { opacity: 1; }
+}
+
+/* ---------- Service ---------- */
+.service { padding: clamp(60px, 8vw, 120px) 0; }
+.service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.service-card {
+  position: relative;
+  min-height: 420px;
+  padding: clamp(28px, 4vw, 48px);
+  border-radius: 18px;
+  background: var(--paper);
+  color: #1a1006;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  overflow: hidden;
+}
+.service-card p { font-size: 19px; max-width: 28ch; color: rgba(26, 16, 6, 0.72); }
+.service-card--gold { background: var(--gold); }
+.service-han {
+  position: absolute;
+  top: clamp(20px, 3vw, 36px);
+  right: clamp(20px, 3vw, 36px);
+  font-family: var(--han);
+  font-weight: 900;
+  font-size: clamp(80px, 10vw, 150px);
+  line-height: 0.9;
+  writing-mode: vertical-rl;
+  color: var(--red);
+}
+.service-card--gold .service-han { color: #1a1006; }
+
+/* ---------- Wall moment ---------- */
+.wall {
+  min-height: 170vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 20vh;
+}
+.wall-type {
+  width: 100%;
+  padding: 0 var(--gutter);
+  font-size: clamp(54px, 10vw, 168px);
+  line-height: 0.9;
+  font-weight: 800;
+  font-stretch: 76%;
+  letter-spacing: -0.04em;
+  text-align: center;
+  text-shadow: 0 6px 60px rgba(12, 8, 6, 0.9), 0 2px 12px rgba(12, 8, 6, 0.8);
+}
+.wall-type em { font-style: normal; color: var(--gold); }
+
+/* ---------- Visit ---------- */
+.visit { padding: 0 0 clamp(80px, 10vw, 140px); }
+.visit-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+}
+.visit-main, .visit-hours {
+  background: var(--panel);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: clamp(28px, 4vw, 52px);
+}
+.visit-main { display: grid; gap: 20px; align-content: start; justify-items: start; }
+.visit-title { font-size: clamp(52px, 7vw, 112px); }
+address { font-style: normal; font-size: clamp(20px, 1.8vw, 26px); line-height: 1.3; color: rgba(243, 234, 216, 0.86); }
+.visit-hours h3 { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+.hours { list-style: none; margin: 0; padding: 0; }
+.hours li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+  color: var(--paper-dim);
+}
+.hours li.is-today { color: var(--paper); font-weight: 650; }
+.hours li.is-today span:first-child::after { content: " · hoy"; color: var(--gold); font-weight: 500; }
+.visit-note { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.visit-note span {
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 184, 74, 0.45);
+  color: var(--gold);
+}
+
+/* ---------- Footer ---------- */
+.foot { border-top: 1px solid var(--line); background: var(--bg); padding: 28px 0 max(28px, env(safe-area-inset-bottom)); }
+.foot-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; font-size: 14px; color: var(--paper-dim); }
+.foot .brand { color: var(--paper); font-size: 15px; }
+
+/* ---------- Reveal ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+[data-reveal].is-in { opacity: 1; transform: none; }
+.drink[data-reveal].is-in { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px)); }
+.no-js [data-reveal], .no-js [data-enter] { opacity: 1; transform: none; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1000px) {
+  .day-list li { grid-template-columns: 130px 1fr; grid-template-areas: "when h" "han p"; row-gap: 8px; }
+  .when { grid-area: when; }
+  .han { grid-area: han; }
+  .day-list h3 { grid-area: h; }
+  .day-list p { grid-area: p; }
+  .drink-grid { grid-template-columns: repeat(2, 1fr); }
+  .visit-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  body { font-size: 16px; }
+  .nav-links { display: none; }
+  .nav { padding-top: max(14px, env(safe-area-inset-top)); padding-bottom: 14px; }
+  .hero { align-items: flex-end; padding-bottom: 110px; }
+  .hero-actions .btn { flex: 1 1 auto; }
+  .seal { display: none; }
+  .veil { background: radial-gradient(ellipse 120% 70% at 50% 40%, transparent 30%, rgba(12, 8, 6, 0.8) 100%), linear-gradient(to top, rgba(12, 8, 6, 0.8), transparent 60%); }
+  .day-list li { grid-template-columns: 1fr; grid-template-areas: "when" "h" "p"; padding: 22px 0; }
+  .day-list .han { display: none; }
+  .drink-grid { grid-template-columns: 1fr; }
+  .drink { min-height: 200px; }
+  .service-grid { grid-template-columns: 1fr; }
+  .service-card { min-height: 320px; }
+  .br-lg { display: none; }
+  .words { height: 240vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-enter], [data-reveal], .hero-title [data-enter] { transition: opacity 400ms ease; transform: none !important; }
+  .scroll-hint i::after, .status.is-open i { animation: none; }
+  .w { transform: none; }
+  .drink { transform: none !important; }
+}
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="veil" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="#inicio" aria-label="Golden Coin, inicio">
+      <span class="brand-coin" aria-hidden="true"></span>
+      <span>Golden Coin</span>
+    </a>
+    <nav class="nav-links" aria-label="Secciones">
+      <a href="#servimos">Qué servimos</a>
+      <a href="#bebidas">Bebidas</a>
+      <a href="#visita">Visítanos</a>
+    </nav>
+    <span class="status" data-status><i></i><b>Lun–Dom · 8:00–21:00</b></span>
+  </header>
+
+  <main>
+    <!-- 1 · Hero -->
+    <section class="hero" id="inicio">
+      <div class="wrap hero-inner">
+        <h1 class="hero-title" aria-label="Golden Coin">
+          <span class="line"><span data-enter style="--d:1">Golden</span></span>
+          <span class="line"><span data-enter style="--d:2">Coin</span></span>
+        </h1>
+        <p class="hero-lead" data-enter style="--d:3">Cocina china en Los Pinos, Puebla. Desayuno, brunch, comida, cena y postre en un solo lugar, con café, té, cerveza, vino y cócteles para acompañar. Abierto todos los días.</p>
+        <div class="hero-actions" data-enter style="--d:4">
+          <a class="btn btn-gold" href="https://www.google.com/maps/search/?api=1&amp;query=Golden%20Coin%20Los%20Pinos%2072240%20Heroica%20Puebla%20de%20Zaragoza" target="_blank" rel="noopener">Cómo llegar</a>
+          <a class="btn btn-ghost" href="#servimos">Qué servimos</a>
+        </div>
+      </div>
+      <div class="seal" data-enter style="--d:5" aria-hidden="true"><span>金</span><span>币</span></div>
+      <div class="scroll-hint" aria-hidden="true"><span>Desliza</span><i></i></div>
+    </section>
+
+    <!-- 2 · Word scroll -->
+    <section class="words" aria-label="Golden Coin en una frase">
+      <div class="words-sticky">
+        <p class="words-text wrap" data-words>
+          Abrimos a las <em>ocho</em> con café y té caliente, seguimos con el <em>brunch</em>, la <em>comida</em> y la <em>cena</em>, y cerramos a las <em>nueve</em> con postre y un cóctel. Todo el día, todos los días.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3 · Qué servimos -->
+    <section class="menu-day" id="servimos">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2>Un día entero <br class="br-lg">en la mesa</h2>
+        </div>
+        <ol class="day-list">
+          <li data-reveal style="--i:0"><span class="when">Desde 8:00</span><span class="han" aria-hidden="true">早餐</span><h3>Desayuno</h3><p>Para empezar temprano, con algo caliente y una taza de café o té.</p></li>
+          <li data-reveal style="--i:1"><span class="when">Media mañana</span><span class="han" aria-hidden="true">早午</span><h3>Brunch</h3><p>Para quien llega tarde al desayuno y temprano a la comida.</p></li>
+          <li data-reveal style="--i:2"><span class="when">Mediodía</span><span class="han" aria-hidden="true">午饭</span><h3>Comida</h3><p>Para sentarse con calma o para llevarse de regreso al trabajo.</p></li>
+          <li data-reveal style="--i:3"><span class="when">Hasta 21:00</span><span class="han" aria-hidden="true">晚饭</span><h3>Cena</h3><p>La última comida del día, aquí mismo o en casa.</p></li>
+          <li data-reveal style="--i:4"><span class="when">Para cerrar</span><span class="han" aria-hidden="true">甜点</span><h3>Postre</h3><p>El final dulce de cualquiera de las anteriores.</p></li>
+          <li data-reveal style="--i:5"><span class="when">A cualquier hora</span><span class="han" aria-hidden="true">小吃</span><h3>Bocadillos y platillos pequeños</h3><p>Algo rápido para picar, compartir o acompañar una bebida.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 4 · Scroll marquee -->
+    <section class="band" aria-hidden="true">
+      <div class="band-row" data-band="-1"><span>Desayuno · Brunch · Comida · Cena · Postre · Bocadillos · Platillos pequeños · Desayuno · Brunch · Comida · Cena · Postre · </span></div>
+      <div class="band-row band-outline" data-band="1"><span>Café · Té · Cerveza · Vino · Cócteles · 咖啡 · 茶 · 啤酒 · Café · Té · Cerveza · Vino · Cócteles · 咖啡 · 茶 · 啤酒 · </span></div>
+    </section>
+
+    <!-- 5 · Bebidas -->
+    <section class="drinks" id="bebidas">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <h2>Para beber, algo para cada hora</h2>
+          <p class="section-lead">De la primera taza de la mañana a la última copa de la noche.</p>
+        </div>
+        <div class="drink-grid">
+          <article class="drink" data-reveal data-tilt style="--i:0"><span class="drink-han" aria-hidden="true">咖啡</span><h3>Café</h3><p>De la primera hora a la sobremesa.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:1"><span class="drink-han" aria-hidden="true">茶</span><h3>Té</h3><p>Una selección de tés para elegir el tuyo.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:2"><span class="drink-han" aria-hidden="true">啤酒</span><h3>Cerveza</h3><p>Bien fría, para la comida o la cena.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:3"><span class="drink-han" aria-hidden="true">葡萄酒</span><h3>Vino</h3><p>Para acompañar la mesa con calma.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:4"><span class="drink-han" aria-hidden="true">鸡尾酒</span><h3>Cócteles</h3><p>Para la tarde y la noche.</p></article>
+          <article class="drink" data-reveal data-tilt style="--i:5"><span class="drink-han" aria-hidden="true">酒</span><h3>Bebidas con alcohol</h3><p>Más opciones de bar para quien busca algo distinto.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · En el local o para llevar -->
+    <section class="service" id="servicio">
+      <div class="wrap service-grid">
+        <div class="service-card" data-reveal style="--i:0">
+          <span class="service-han" aria-hidden="true">堂食</span>
+          <h2>En el local</h2>
+          <p>Siéntate, pide y quédate el tiempo que quieras.</p>
+        </div>
+        <div class="service-card service-card--gold" data-reveal style="--i:1">
+          <span class="service-han" aria-hidden="true">外卖</span>
+          <h2>Para llevar</h2>
+          <p>Pide en el mostrador y llévatelo a casa o a la oficina.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · Wall moment -->
+    <section class="wall" id="muro" aria-label="Todos los días">
+      <p class="wall-type" data-reveal>Todos los días,<br>de <em>8</em> a <em>21</em>.</p>
+    </section>
+
+    <!-- 8 · Visita -->
+    <section class="visit" id="visita">
+      <div class="wrap visit-grid">
+        <div class="visit-main" data-reveal>
+          <h2 class="visit-title">Visítanos en Los Pinos</h2>
+          <address>Los Pinos, 72240<br>Heroica Puebla de Zaragoza, Pue.</address>
+          <a class="btn btn-gold" href="https://www.google.com/maps/search/?api=1&amp;query=Golden%20Coin%20Los%20Pinos%2072240%20Heroica%20Puebla%20de%20Zaragoza" target="_blank" rel="noopener">Abrir en Google Maps</a>
+        </div>
+        <div class="visit-hours" data-reveal style="--i:1">
+          <h3>Horario</h3>
+          <ul class="hours" data-hours>
+            <li data-day="1"><span>Lunes</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="2"><span>Martes</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="3"><span>Miércoles</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="4"><span>Jueves</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="5"><span>Viernes</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="6"><span>Sábado</span><span>8:00 AM – 9:00 PM</span></li>
+            <li data-day="0"><span>Domingo</span><span>8:00 AM – 9:00 PM</span></li>
+          </ul>
+          <p class="visit-note"><span>En el local</span><span>Para llevar</span></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <span class="brand"><span class="brand-coin" aria-hidden="true"></span>Golden Coin</span>
+      <span>Cocina china · Los Pinos, Puebla</span>
+      <span>Lunes a domingo · 8:00–21:00</span>
+    </div>
+  </footer>
+
+  <script type="module">
+// Golden Coin — DOM motion: hero entrance, reveals, word scroll, scroll band, tilt, open status.
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
+/* ---------- Hero entrance (once, on load) ---------- */
+requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add("is-loaded")));
+
+/* ---------- Reveal on enter ---------- */
+const io = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add("is-in");
+        io.unobserve(e.target);
+      }
+    }
+  },
+  { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+);
+document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+
+/* ---------- Word scroll: split into words, light them as the section scrolls ---------- */
+const wordsEl = document.querySelector("[data-words]");
+const words = [];
+if (wordsEl) {
+  const frag = document.createDocumentFragment();
+  let joined = false; // true when the last thing written was a word with no space after it
+  const push = (text, key) => {
+    text.split(/(\s+)/).forEach((tok) => {
+      if (!tok) return;
+      if (/^\s+$/.test(tok)) {
+        joined = false;
+        return frag.append(" ");
+      }
+      if (joined && words.length) {
+        // punctuation glued to the previous word across an <em> boundary ("cena,")
+        words[words.length - 1].textContent += tok;
+        return;
+      }
+      joined = true;
+      const s = document.createElement("span");
+      s.className = "w" + (key ? " is-key" : "");
+      s.textContent = tok;
+      frag.append(s);
+      words.push(s);
+    });
+  };
+  wordsEl.childNodes.forEach((n) => {
+    if (n.nodeType === 3) push(n.textContent.trim() ? n.textContent : " ", false);
+    else push(n.textContent, true);
+  });
+  wordsEl.setAttribute("aria-label", wordsEl.textContent.replace(/\s+/g, " ").trim());
+  wordsEl.textContent = "";
+  wordsEl.append(frag);
+  words.forEach((w) => w.setAttribute("aria-hidden", "true"));
+}
+const wordsSection = document.querySelector(".words");
+
+/* ---------- Scroll band ---------- */
+const bands = [...document.querySelectorAll("[data-band]")];
+const bandSection = document.querySelector(".band");
+
+/* ---------- Nav ---------- */
+const nav = document.querySelector(".nav");
+
+let ticking = false;
+function onScroll() {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(update);
+}
+function update() {
+  ticking = false;
+  const vh = innerHeight;
+  nav.classList.toggle("is-scrolled", scrollY > 40);
+
+  if (wordsSection && words.length) {
+    const r = wordsSection.getBoundingClientRect();
+    const total = r.height - vh;
+    // 0 when the sticky block pins, 1 a little before it releases
+    const p = reduce ? 1 : clamp(-r.top / (total * 0.85));
+    const n = words.length;
+    for (let i = 0; i < n; i++) {
+      const local = clamp(p * (n + 4) - i, 0, 4) / 4; // each word fades over ~4 word-steps
+      words[i].style.setProperty("--o", (0.14 + local * 0.86).toFixed(3));
+    }
+  }
+
+  if (bandSection && !reduce) {
+    const r = bandSection.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < vh) {
+      const p = (vh - r.top) / (vh + r.height); // 0..1 while the band crosses the screen
+      bands.forEach((b) => {
+        const dir = Number(b.dataset.band);
+        const w = b.firstElementChild.offsetWidth;
+        const shift = dir < 0 ? -p * w * 0.35 : -w * 0.35 + p * w * 0.35;
+        b.style.transform = `translate3d(${shift.toFixed(1)}px,0,0)`;
+      });
+    }
+  }
+}
+addEventListener("scroll", onScroll, { passive: true });
+addEventListener("resize", onScroll);
+update();
+
+/* ---------- 3D tilt on drink cards (pointer devices only) ---------- */
+if (finePointer && !reduce) {
+  document.querySelectorAll("[data-tilt]").forEach((card) => {
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      card.style.setProperty("--ry", ((x - 0.5) * 10).toFixed(2) + "deg");
+      card.style.setProperty("--rx", ((0.5 - y) * 8).toFixed(2) + "deg");
+      card.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
+      card.style.setProperty("--my", (y * 100).toFixed(1) + "%");
+    });
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--rx", "0deg");
+      card.style.setProperty("--ry", "0deg");
+    });
+  });
+}
+
+/* ---------- Open now (Puebla time) + today's row ---------- */
+function pueblaNow() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Mexico_City",
+    weekday: "short",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  }).formatToParts(new Date());
+  const get = (t) => parts.find((p) => p.type === t)?.value;
+  const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(get("weekday"));
+  const h = Number(get("hour")) % 24;
+  const m = Number(get("minute"));
+  return { day, minutes: h * 60 + m };
+}
+function refreshStatus() {
+  const { day, minutes } = pueblaNow();
+  const open = minutes >= 8 * 60 && minutes < 21 * 60;
+  const el = document.querySelector("[data-status]");
+  if (el) {
+    el.classList.toggle("is-open", open);
+    el.classList.toggle("is-closed", !open);
+    el.querySelector("b").textContent = open ? "Abierto · cierra 21:00" : "Cerrado · abre 8:00";
+  }
+  document.querySelectorAll("[data-hours] li").forEach((li) => li.classList.toggle("is-today", Number(li.dataset.day) === day));
+}
+refreshStatus();
+setInterval(refreshStatus, 60_000);
+  </script>
+  <script type="module">
+// Golden Coin — 3D scene: a field of paper cards and gold cash coins the camera flies
+// through on scroll, which assembles into a wall near the end of the page.
+import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = THREE.MathUtils.lerp;
+const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+// Seeded random so the composition is the same on every visit.
+let seed = 20261127;
+const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+const range = (a, b) => a + rand() * (b - a);
+
+const BG = 0x0c0806;
+const CARD_W = 1.1;
+const CARD_H = 1.5;
+const START_Z = 9;
+const END_Z = -46;
+
+/* ------------------------------------------------------------------ */
+/* Card faces                                                          */
+/* ------------------------------------------------------------------ */
+const THEMES = {
+  paper: { bg: "#efe5cf", ink: "#1b130c", accent: "#b51c2a" },
+  gold: { bg: "#ecc14f", ink: "#1b130c", accent: "#1b130c" },
+  red: { bg: "#b51c2a", ink: "#fbe9d6", accent: "#f3c95e" },
+  ink: { bg: "#1c140e", ink: "#efe5cf", accent: "#e8b84a" },
+};
+const FACES = [
+  { t: "Desayuno", h: "早餐", th: "paper", l: "a" },
+  { t: "Brunch", h: "早午", th: "gold", l: "b" },
+  { t: "Comida", h: "午饭", th: "paper", l: "a" },
+  { t: "Cena", h: "晚饭", th: "ink", l: "b" },
+  { t: "Postre", h: "甜点", th: "paper", l: "c" },
+  { t: "Bocadillos rápidos", h: "小吃", th: "paper", l: "a" },
+  { t: "Platillos pequeños", h: "点", th: "red", l: "a" },
+  { t: "Café", h: "咖啡", th: "paper", l: "b" },
+  { t: "Té", h: "茶", th: "gold", l: "c" },
+  { t: "Cerveza", h: "啤酒", th: "paper", l: "a" },
+  { t: "Vino", h: "葡萄酒", th: "red", l: "b" },
+  { t: "Cócteles", h: "鸡尾酒", th: "paper", l: "a" },
+  { t: "Bebidas con alcohol", h: "酒", th: "ink", l: "a" },
+  { t: "En el local", h: "堂食", th: "paper", l: "b" },
+  { t: "Para llevar", h: "外卖", th: "gold", l: "a" },
+  { t: "Golden Coin", h: "金币", th: "red", l: "c" },
+  { t: "Lunes a domingo", h: "日日", th: "paper", l: "a" },
+  { t: "8:00 a 21:00", h: "早晚", th: "ink", l: "a" },
+  { t: "Los Pinos, Puebla", h: "金", th: "paper", l: "a" },
+  { t: "Buena fortuna", h: "福", th: "red", l: "c" },
+  { t: "Té de la tarde", h: "茶", th: "paper", l: "b" },
+  { t: "Una copa más", h: "酒", th: "gold", l: "a" },
+  { t: "Para compartir", h: "吃", th: "paper", l: "c" },
+  { t: "Abierto hoy", h: "日", th: "paper", l: "b" },
+];
+
+function wrapLines(ctx, text, maxW) {
+  const words = text.split(" ");
+  const lines = [];
+  let cur = "";
+  for (const w of words) {
+    const test = cur ? cur + " " + w : w;
+    if (ctx.measureText(test).width > maxW && cur) {
+      lines.push(cur);
+      cur = w;
+    } else cur = test;
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+function drawFace(face, index) {
+  const W = 512;
+  const H = 698;
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext("2d");
+  const th = THEMES[face.th];
+  const pad = 34;
+
+  ctx.fillStyle = th.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // paper grain + soft light falloff
+  for (let i = 0; i < 2600; i++) {
+    ctx.fillStyle = rand() > 0.5 ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.05)";
+    ctx.fillRect(rand() * W, rand() * H, 1.6, 1.6);
+  }
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, "rgba(255,255,255,0.10)");
+  g.addColorStop(1, "rgba(0,0,0,0.16)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = th.ink;
+  ctx.strokeStyle = th.ink;
+  ctx.textBaseline = "alphabetic";
+  if ("fontStretch" in ctx) ctx.fontStretch = "normal";
+
+  // masthead
+  ctx.font = '600 20px "Bricolage Grotesque", sans-serif';
+  ctx.fillText("GOLDEN COIN", pad, 54);
+  ctx.textAlign = "right";
+  ctx.fillText("Nº " + String(index + 1).padStart(2, "0"), W - pad, 54);
+  ctx.textAlign = "left";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(pad, 72);
+  ctx.lineTo(W - pad, 72);
+  ctx.stroke();
+
+  // footer
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(pad, H - 70);
+  ctx.lineTo(W - pad, H - 70);
+  ctx.stroke();
+  ctx.font = '500 18px "Bricolage Grotesque", sans-serif';
+  ctx.fillText("8:00 — 21:00", pad, H - 38);
+  ctx.textAlign = "right";
+  ctx.fillText("PUEBLA", W - pad, H - 38);
+  ctx.textAlign = "left";
+
+  const setTitleFont = (size) => {
+    if ("fontStretch" in ctx) ctx.fontStretch = "condensed";
+    ctx.font = `800 ${size}px "Bricolage Grotesque", sans-serif`;
+  };
+  const fitTitle = (maxW, maxLines, start) => {
+    let size = start;
+    let lines;
+    do {
+      setTitleFont(size);
+      lines = wrapLines(ctx, face.t, maxW);
+      size -= 4;
+    } while ((lines.length > maxLines || lines.some((l) => ctx.measureText(l).width > maxW)) && size > 40);
+    return { size: size + 4, lines };
+  };
+
+  const han = (size, x, y, color, align = "left") => {
+    if ("fontStretch" in ctx) ctx.fontStretch = "normal";
+    ctx.font = `900 ${size}px "Noto Serif SC", serif`;
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    ctx.fillText(face.h, x, y);
+    ctx.textAlign = "left";
+  };
+
+  const maxW = W - pad * 2;
+  if (face.l === "a") {
+    // big condensed title at the top, characters bottom right
+    const { size, lines } = fitTitle(maxW, 3, 150);
+    ctx.fillStyle = th.ink;
+    lines.forEach((ln, i) => ctx.fillText(ln, pad - 4, 82 + size * 0.86 * (i + 1)));
+    const hs = face.h.length > 2 ? 92 : 130;
+    han(hs, W - pad, H - 96, th.accent, "right");
+  } else if (face.l === "b") {
+    // characters vertical on the left, title bottom
+    if ("fontStretch" in ctx) ctx.fontStretch = "normal";
+    ctx.font = '900 118px "Noto Serif SC", serif';
+    ctx.fillStyle = th.accent;
+    [...face.h].forEach((ch, i) => ctx.fillText(ch, pad, 200 + i * 124));
+    const { size, lines } = fitTitle(maxW, 2, 128);
+    ctx.fillStyle = th.ink;
+    const baseY = H - 92 - (lines.length - 1) * size * 0.86;
+    lines.forEach((ln, i) => {
+      ctx.textAlign = "right";
+      ctx.fillText(ln, W - pad + 2, baseY + size * 0.86 * i);
+    });
+    ctx.textAlign = "left";
+  } else {
+    // stamp: one red seal in the middle, small title under it
+    const s = 250;
+    const x = (W - s) / 2;
+    const y = 128;
+    ctx.fillStyle = face.th === "red" ? "#f3c95e" : "#b51c2a";
+    ctx.fillRect(x, y, s, s);
+    ctx.strokeStyle = face.th === "red" ? "#b51c2a" : th.bg;
+    ctx.lineWidth = 8;
+    ctx.strokeRect(x + 14, y + 14, s - 28, s - 28);
+    han(face.h.length > 1 ? 104 : 170, W / 2, face.h.length > 1 ? y + 168 : y + 190, face.th === "red" ? "#b51c2a" : th.bg, "center");
+    const { size, lines } = fitTitle(maxW, 2, 110);
+    ctx.fillStyle = th.ink;
+    ctx.textAlign = "center";
+    lines.forEach((ln, i) => ctx.fillText(ln, W / 2, y + s + 40 + size * 0.86 * (i + 1)));
+    ctx.textAlign = "left";
+  }
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8;
+  return tex;
+}
+
+/* ------------------------------------------------------------------ */
+/* Coin (Chinese cash coin: round with a square hole)                  */
+/* ------------------------------------------------------------------ */
+function coinGeometry() {
+  const shape = new THREE.Shape();
+  shape.absarc(0, 0, 1, 0, Math.PI * 2, false);
+  const hole = new THREE.Path();
+  const s = 0.27;
+  hole.moveTo(-s, -s);
+  hole.lineTo(-s, s);
+  hole.lineTo(s, s);
+  hole.lineTo(s, -s);
+  hole.lineTo(-s, -s);
+  shape.holes.push(hole);
+  const geo = new THREE.ExtrudeGeometry(shape, {
+    depth: 0.12,
+    bevelEnabled: true,
+    bevelThickness: 0.045,
+    bevelSize: 0.04,
+    bevelSegments: 4,
+    curveSegments: 72,
+  });
+  geo.center();
+  return geo;
+}
+
+function coinTextures() {
+  const N = 512;
+  const mk = () => {
+    const c = document.createElement("canvas");
+    c.width = c.height = N;
+    return [c, c.getContext("2d")];
+  };
+  const chars = [
+    ["金", 0, -1],
+    ["币", 0, 1],
+    ["福", 1, 0],
+    ["寿", -1, 0],
+  ];
+  // UVs on the caps run -1..1 across the coin; map that to 0..1 with repeat/offset below.
+  const toPx = (u) => (u * 0.5 + 0.5) * N;
+
+  const [cc, cx] = mk();
+  const grad = cx.createRadialGradient(N * 0.38, N * 0.32, 10, N / 2, N / 2, N * 0.6);
+  grad.addColorStop(0, "#ffe7a3");
+  grad.addColorStop(0.55, "#e2ad44");
+  grad.addColorStop(1, "#a8761f");
+  cx.fillStyle = grad;
+  cx.fillRect(0, 0, N, N);
+
+  const [bc, bx] = mk();
+  bx.fillStyle = "#555";
+  bx.fillRect(0, 0, N, N);
+
+  for (const [ctx, ink, rim] of [
+    [cx, "rgba(120,74,12,0.55)", "rgba(255,236,170,0.55)"],
+    [bx, "#fff", "#fff"],
+  ]) {
+    // raised rim and raised border round the hole
+    ctx.strokeStyle = rim;
+    ctx.lineWidth = N * 0.035;
+    ctx.beginPath();
+    ctx.arc(N / 2, N / 2, N * 0.455, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.lineWidth = N * 0.03;
+    const hs = 0.27 * N * 0.5 + N * 0.03;
+    ctx.strokeRect(N / 2 - hs, N / 2 - hs, hs * 2, hs * 2);
+    ctx.fillStyle = ink;
+    ctx.font = `900 ${N * 0.16}px "Noto Serif SC", serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (const [ch, x, y] of chars) {
+      // canvas y grows downward, shape y grows upward
+      ctx.fillText(ch, toPx(x * 0.64), toPx(y * 0.64));
+    }
+  }
+
+  const map = new THREE.CanvasTexture(cc);
+  map.colorSpace = THREE.SRGBColorSpace;
+  const bump = new THREE.CanvasTexture(bc);
+  for (const t of [map, bump]) {
+    t.repeat.set(0.5, 0.5);
+    t.offset.set(0.5, 0.5);
+    t.anisotropy = 8;
+  }
+  return { map, bump };
+}
+
+/* ------------------------------------------------------------------ */
+/* Scene                                                               */
+/* ------------------------------------------------------------------ */
+async function init() {
+  const canvas = document.getElementById("scene");
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
+  } catch {
+    document.documentElement.classList.add("no-webgl");
+    return;
+  }
+
+  // Wait for the fonts the canvas textures draw with (bounded, so a slow network never blocks the scene).
+  try {
+    await Promise.race([
+      Promise.all([
+        document.fonts.load('800 100px "Bricolage Grotesque"'),
+        document.fonts.load('600 20px "Bricolage Grotesque"'),
+        document.fonts.load('900 100px "Noto Serif SC"', "金币福寿早餐午饭晚甜点小吃咖啡茶啤酒葡萄鸡尾外卖堂食日"),
+      ]),
+      new Promise((r) => setTimeout(r, 2500)),
+    ]);
+  } catch {}
+
+  const small = innerWidth < 760;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.5 : 2));
+  renderer.setSize(innerWidth, innerHeight, false);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.setClearColor(BG, 1);
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(BG, 5, small ? 26 : 30);
+
+  const camera = new THREE.PerspectiveCamera(small ? 62 : 50, innerWidth / innerHeight, 0.1, 120);
+  camera.position.set(0, 0, START_Z);
+
+  // lights: dim warm room, one key, a gold light that follows the pointer
+  scene.add(new THREE.AmbientLight(0x7a5a44, 0.55));
+  const key = new THREE.DirectionalLight(0xfff0d8, 1.6);
+  key.position.set(-4, 6, 8);
+  scene.add(key);
+  const pointerLight = new THREE.PointLight(0xffc46a, 26, 0, 1.6);
+  scene.add(pointerLight);
+
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envMap = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  /* ---- cards ---- */
+  const faces = FACES.map((f, i) => drawFace(f, i));
+  const materials = faces.map(
+    (map) => new THREE.MeshStandardMaterial({ map, roughness: 0.88, metalness: 0, side: THREE.DoubleSide }),
+  );
+  const geos = [-0.1, 0.05, 0.13].map((curl) => {
+    const g = new THREE.PlaneGeometry(CARD_W, CARD_H, 6, 8);
+    const p = g.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i);
+      const y = p.getY(i);
+      p.setZ(i, curl * x * x + curl * 0.25 * y * y);
+    }
+    g.computeVertexNormals();
+    return g;
+  });
+
+  const COUNT = small ? 56 : 96;
+  const cards = [];
+  for (let i = 0; i < COUNT; i++) {
+    const mesh = new THREE.Mesh(geos[i % geos.length], materials[i % materials.length]);
+    const z = lerp(4.5, END_Z - 10, i / COUNT) + range(-1.5, 1.5);
+    let x, y;
+    do {
+      x = range(small ? -4.5 : -9, small ? 4.5 : 9);
+      y = range(-5.2, 5.2);
+    } while (Math.abs(x) < (small ? 1.1 : 1.6) && Math.abs(y) < 1.4); // keep the flight lane open
+    const s = range(0.85, 1.25);
+    const sPos = new THREE.Vector3(x, y, z);
+    const sQuat = new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(range(-0.35, 0.35), range(-0.7, 0.7), range(-0.3, 0.3)),
+    );
+    mesh.position.copy(sPos);
+    mesh.quaternion.copy(sQuat);
+    mesh.scale.setScalar(s);
+    scene.add(mesh);
+    cards.push({
+      mesh,
+      sPos,
+      sQuat,
+      s,
+      wPos: new THREE.Vector3(),
+      wQuat: new THREE.Quaternion(),
+      delay: 0,
+      phase: range(0, Math.PI * 2),
+      speed: range(0.35, 0.7),
+    });
+  }
+
+  /* ---- coins ---- */
+  const coinGeo = coinGeometry();
+  const { map: coinMap, bump: coinBump } = coinTextures();
+  const coinFace = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    map: coinMap,
+    bumpMap: coinBump,
+    bumpScale: 4,
+    metalness: 1,
+    roughness: 0.3,
+    envMap,
+    envMapIntensity: 1.25,
+  });
+  const coinEdge = new THREE.MeshStandardMaterial({
+    color: 0xd9a441,
+    metalness: 1,
+    roughness: 0.26,
+    envMap,
+    envMapIntensity: 1.25,
+  });
+  const coinMats = [coinFace, coinEdge];
+
+  const heroCoin = new THREE.Group();
+  const heroMesh = new THREE.Mesh(coinGeo, coinMats);
+  heroCoin.add(heroMesh);
+  // a tasseled red cord through the hole
+  const cord = new THREE.Mesh(
+    new THREE.TorusGeometry(0.42, 0.035, 12, 48),
+    new THREE.MeshStandardMaterial({ color: 0xb51c2a, roughness: 0.6 }),
+  );
+  cord.position.set(0, 0.62, 0);
+  cord.rotation.y = Math.PI / 2;
+  heroMesh.add(cord);
+  scene.add(heroCoin);
+
+  const placeHero = () => {
+    const narrow = innerWidth < 760;
+    heroCoin.position.set(narrow ? 1.2 : 3.1, narrow ? 1.9 : 0.35, narrow ? 3.4 : 4.4);
+    heroCoin.scale.setScalar(narrow ? 0.85 : 1.25);
+  };
+  placeHero();
+
+  const coins = [];
+  const COINS = small ? 7 : 12;
+  for (let i = 0; i < COINS; i++) {
+    const m = new THREE.Mesh(coinGeo, coinMats);
+    const z = lerp(0, END_Z - 6, (i + 0.5) / COINS);
+    m.position.set(range(-6, 6), range(-3.6, 3.6), z);
+    if (Math.abs(m.position.x) < 1.4) m.position.x += Math.sign(m.position.x || 1) * 1.6;
+    m.scale.setScalar(range(0.28, 0.5));
+    m.rotation.set(range(-0.6, 0.6), range(0, Math.PI), range(-0.4, 0.4));
+    scene.add(m);
+    coins.push({ m, spin: range(0.25, 0.6) * (rand() > 0.5 ? 1 : -1), phase: range(0, 6.28), base: m.position.clone() });
+  }
+
+  /* ---- gold dust ---- */
+  const DUST = small ? 260 : 520;
+  const dustPos = new Float32Array(DUST * 3);
+  for (let i = 0; i < DUST; i++) {
+    dustPos[i * 3] = range(-11, 11);
+    dustPos[i * 3 + 1] = range(-7, 7);
+    dustPos[i * 3 + 2] = range(END_Z - 14, START_Z);
+  }
+  const dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+  const dotC = document.createElement("canvas");
+  dotC.width = dotC.height = 64;
+  const dctx = dotC.getContext("2d");
+  const dg = dctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  dg.addColorStop(0, "rgba(255,226,150,1)");
+  dg.addColorStop(0.35, "rgba(255,200,90,0.45)");
+  dg.addColorStop(1, "rgba(255,200,90,0)");
+  dctx.fillStyle = dg;
+  dctx.fillRect(0, 0, 64, 64);
+  const dust = new THREE.Points(
+    dustGeo,
+    new THREE.PointsMaterial({
+      size: 0.09,
+      map: new THREE.CanvasTexture(dotC),
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      opacity: 0.85,
+    }),
+  );
+  scene.add(dust);
+
+  /* ---- wall layout (cards assemble into a flat grid facing the final camera) ---- */
+  const tmpEuler = new THREE.Euler();
+  function layoutWall() {
+    const aspect = innerWidth / innerHeight;
+    const tanHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const cellW = CARD_W * 1.06;
+    const cellH = CARD_H * 1.05;
+    // choose the distance so the grid of COUNT cards just overfills the view
+    let D = Math.sqrt((COUNT * cellW * cellH) / aspect) / (2 * tanHalf);
+    let cols, rows;
+    for (;;) {
+      const vh = 2 * D * tanHalf;
+      const vw = vh * aspect;
+      cols = Math.ceil(vw / cellW) + 1;
+      rows = Math.ceil(vh / cellH) + 1;
+      if (cols * rows <= COUNT || D < 2) break;
+      D *= 0.96;
+    }
+    const wallZ = END_Z - D;
+    const slots = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = (c - (cols - 1) / 2) * cellW + (r % 2 ? cellW * 0.18 : 0);
+        const y = (r - (rows - 1) / 2) * cellH;
+        slots.push(new THREE.Vector3(x, y, wallZ));
+      }
+    }
+    // spread the faces so the same card never sits next to itself too often
+    const order = cards.map((_, i) => i).sort((a, b) => ((a * 37) % COUNT) - ((b * 37) % COUNT));
+    order.forEach((ci, k) => {
+      const card = cards[ci];
+      card.out = new THREE.Vector2(card.sPos.x, card.sPos.y).normalize();
+      card.arc = clamp(Math.abs(card.sPos.z - wallZ) / 18) * 9;
+      if (k < slots.length) {
+        card.wPos.copy(slots[k]);
+        card.wPos.z += range(-0.05, 0.05);
+        tmpEuler.set(range(-0.04, 0.04), range(-0.05, 0.05), range(-0.05, 0.05));
+        card.wQuat.setFromEuler(tmpEuler);
+        card.delay = clamp(slots[k].length() > 0 ? Math.hypot(slots[k].x, slots[k].y) / 9 : 0);
+        card.wScale = 1;
+      } else {
+        // spares retreat into the dark behind the wall
+        card.wPos.set(card.sPos.x * 1.4, card.sPos.y * 1.4, wallZ - 18);
+        card.wQuat.copy(card.sQuat);
+        card.delay = 0.5;
+        card.wScale = card.s;
+      }
+    });
+  }
+  layoutWall();
+
+  /* ---- scroll + pointer ---- */
+  const wallSection = document.getElementById("muro");
+  let travelEnd = 1;
+  let wallStart = 1;
+  let wallEnd = 1;
+  function measure() {
+    const top = wallSection.getBoundingClientRect().top + scrollY;
+    travelEnd = Math.max(1, top - innerHeight * 0.4);
+    wallStart = top - innerHeight * 0.9;
+    wallEnd = top + innerHeight * 0.35;
+  }
+  measure();
+
+  const pointer = new THREE.Vector2();
+  const pointerSmooth = new THREE.Vector2();
+  addEventListener(
+    "pointermove",
+    (e) => {
+      pointer.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+    },
+    { passive: true },
+  );
+
+  addEventListener("resize", () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight, false);
+    placeHero();
+    layoutWall();
+    measure();
+  });
+  // layout can shift after fonts settle
+  document.fonts?.ready.then(measure);
+  addEventListener("load", measure);
+
+  /* ---- loop ---- */
+  const timer = new THREE.Timer();
+  timer.connect(document);
+  let sTravel = 0;
+  let sWall = 0;
+  const v = new THREE.Vector3();
+  const q = new THREE.Quaternion();
+  const look = new THREE.Vector3();
+
+  function frame() {
+    timer.update();
+    const t = reduce ? 0 : timer.getElapsed();
+    const y = scrollY;
+
+    const travel = clamp(y / travelEnd);
+    const wall = clamp((y - wallStart) / (wallEnd - wallStart));
+    const k = reduce ? 1 : 0.075;
+    sTravel += (travel - sTravel) * k;
+    sWall += (wall - sWall) * k;
+    if (!reduce) pointerSmooth.lerp(pointer, 0.06);
+
+    // camera: fly down the tunnel with a gentle S-curve, then settle square to the wall
+    const tr = easeInOut(sTravel);
+    const sway = 1 - easeOut(sWall);
+    camera.position.set(
+      Math.sin(tr * Math.PI * 1.5) * 1.3 * sway + pointerSmooth.x * 0.45,
+      Math.sin(tr * Math.PI) * 0.7 * sway + pointerSmooth.y * 0.3,
+      lerp(START_Z, END_Z, tr),
+    );
+    look.set(
+      camera.position.x * 0.35 * sway + pointerSmooth.x * 0.9,
+      camera.position.y * 0.35 * sway + pointerSmooth.y * 0.5,
+      camera.position.z - 10,
+    );
+    camera.lookAt(look);
+    camera.rotateZ(Math.sin(tr * Math.PI * 2) * 0.05 * sway);
+
+    pointerLight.position.set(
+      camera.position.x + pointerSmooth.x * 4,
+      camera.position.y + pointerSmooth.y * 2.6,
+      camera.position.z - 4.5,
+    );
+
+    // cards
+    for (const c of cards) {
+      const m = easeInOut(clamp((sWall - c.delay * 0.35) / 0.65));
+      const f = 1 - m;
+      v.lerpVectors(c.sPos, c.wPos, m);
+      // arc outward on the way to the wall so no card sweeps through the lens
+      const arc = Math.sin(m * Math.PI) * c.arc;
+      v.x += c.out.x * arc;
+      v.y += c.out.y * arc;
+      v.y += Math.sin(t * c.speed + c.phase) * 0.12 * f;
+      v.x += Math.cos(t * c.speed * 0.8 + c.phase) * 0.06 * f;
+      c.mesh.position.copy(v);
+      q.slerpQuaternions(c.sQuat, c.wQuat, m);
+      c.mesh.quaternion.copy(q);
+      c.mesh.rotateZ(Math.sin(t * c.speed * 0.6 + c.phase) * 0.05 * f);
+      c.mesh.scale.setScalar(lerp(c.s, c.wScale, m));
+    }
+
+    // coins
+    heroCoin.rotation.y = t * 0.35 + pointerSmooth.x * 0.6 + 0.5;
+    heroCoin.rotation.x = -pointerSmooth.y * 0.35 + Math.sin(t * 0.6) * 0.08;
+    heroCoin.position.y += (((innerWidth < 760 ? 1.9 : 0.35) + Math.sin(t * 0.9) * 0.08) - heroCoin.position.y) * 0.1;
+    for (const c of coins) {
+      c.m.rotation.y += c.spin * 0.016 * (reduce ? 0 : 1);
+      c.m.position.y = c.base.y + Math.sin(t * 0.7 + c.phase) * 0.18;
+    }
+    dust.rotation.z = t * 0.01;
+
+    renderer.render(scene, camera);
+  }
+  renderer.setAnimationLoop(frame);
+  canvas.classList.add("is-ready");
+}
+
+init();
+  </script>
+</body>
+</html>
